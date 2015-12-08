@@ -1,0 +1,29 @@
+{
+  "name": "Doto",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a slight webapp generator",
+  "keywords": [],
+  "dependencies": {
+    "react": "^0.14.3"
+  },
+  "scripts": {
+    "debug": "node debug server.js",
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/junpeng/Doto.git"
+  },
+  "author": "junpeng",
+  "license": "",
+  "devDependencies": {
+    "express": "^4.13.3",
+    "history": "^1.15.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-router": "^1.0.1",
+    "webpack": "^1.12.9"
+  }
+}
