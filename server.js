@@ -1,16 +1,38 @@
-var express = require('express');
+var path = require('path');
+var http = require('http');
+var koa = require('koa');
+var serve = require('koa-static');
+var webpack = require('webpack');
+var webpackDevMiddleware = require('koa-webpack-dev-middleware');
 
-var app = new express();
+var webpackConf = require('./webpack.config');
+var router = require('koa-router')();
+var routes = require('./routes');
+
 var port = 3000;
 
-app.get("/", function(req, res) {
-  res.sendFile(__dirname + '/assets//index.html')
-})
+var app = koa();
 
-app.listen(port, function(error) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port);
-  }
+var debug = false;//process.env.NODE_ENV !== 'production';
+// 开发环境和生产环境对应不同的目录
+var viewDir = debug ? 'src' : 'public';
+
+routes(router, app);
+app.use(router.routes());
+app.use(webpackDevMiddleware(webpack(webpackConf), {
+    contentBase: webpackConf.output.path,
+    publicPath: webpackConf.output.publicPath,
+    hot: true
+    // stats: webpackConf.devServer.stats
+}));
+
+// 处理静态资源和入口文件
+app.use(serve(path.resolve(__dirname, viewDir), {
+    maxage: 0
+}));
+
+app = http.createServer(app.callback());
+
+app.listen(port, function() {
+    console.log('app listen success.');
 });
