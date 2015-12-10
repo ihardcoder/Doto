@@ -16,16 +16,14 @@ module.exports = {
       test: /\.(woff|eot|ttf)$/i,
       loader: 'url?limit=10000&name=fonts/[hash:8].[name].[ext]'
     }, {
-      test: /\.(tpl|ejs)$/,
-      loader: 'ejs'
-    }, {
       test: /\.js$/,
+      exclude: [/node_modules/],
       loader: 'babel',
       query: {
-            presets: ['es2015','react'],
-            cacheDirectory: true,
-            plugins: ['syntax-object-rest-spread']
-        },
+        presets: ['es2015','stage-0','react'],
+        cacheDirectory: true,
+        plugins: ['syntax-object-rest-spread']
+      }
     }, {
       test: /\.css$/,
       loader: 'style!css'
@@ -40,7 +38,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public/js'),
     filename: '[name].js'
-    // publicPath:'/js/'
+      // publicPath:'/js/'
   },
   resolve: {
     root: path.join(__dirname, '/src/js/src/'),
