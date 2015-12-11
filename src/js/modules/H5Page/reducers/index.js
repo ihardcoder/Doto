@@ -3,10 +3,13 @@ import * as types from '../constants';
 const initialState = {
   styles: {
       backgroundColor: '#555',
-      operaterWidth: 100,
-      operaterHeight: 30,
+      backgroundImage:'',
       showcaseWidth:450,
       showcaseHeight:600
+  },
+  status:{
+    showpanel: false,
+    showBackcolorInput: false
   },
   animation:{
     enter: 'normal',
@@ -36,7 +39,20 @@ export function setStyles(state = initialState.styles, action) {
       return state;
   }
 }
-
+export function setStatus(state=initialState.status,action){
+  switch(action.type){
+    case types.TOGGLEPANEL:
+      return Object.assign({},state,{
+        showpanel: action.isshown
+      });
+    case types.TOGGLEBAKCOLORINPUT:
+      return Object.assign({},state,{
+        showBackcolorInput: action.isshown
+      });
+    default:
+      return state;
+  }
+}
 export function setAnimate(state = initialState.animation, action) {
   switch(action.type) {
     case types.SET_ANIMATE_OUT:

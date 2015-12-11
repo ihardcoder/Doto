@@ -1,0 +1,62 @@
+$colorBlack: #323330;
+$colorYellow: #f5da55;
+$hearderHeight: 50px;
+$headerColor: $colorBlack;
+$headerFontColor: $colorYellow;
+$backstageWidth: 200px;
+
+html{
+  font-size: 12px;
+  min-height: 100%;
+}
+body{
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+.doto_header{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: $hearderHeight;
+  margin-bottom: 20px;
+  z-index: 999;
+  .doto_header_box{
+    position: fixed;
+    top: 0;
+    left:0;
+    height: $hearderHeight;
+    width: 100%;
+    background-color: $headerColor;
+    color: $headerFontColor;
+    border-bottom: solid 2px $headerFontColor;
+  }
+  .doto_logo{
+    position: absolute;
+    top: 0;
+    left: 20px;
+    height: $hearderHeight;
+    line-height: $hearderHeight;
+    font-size: 1.67rem;
+    color: $headerFontColor;
+  }
+}
+.doto_main{
+  padding-top: $hearderHeight;
+}
+#doto_appbox{
+  .doto_app{
+    padding-left: $backstageWidth+20px;
+  }
+  .doto_app_backstage{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: $backstageWidth;
+    min-height: 100%;
+    padding-top: $hearderHeight;
+    box-sizing: border-box;
+    background-color: $colorBlack;
+    color: $colorYellow;
+  }
+}

@@ -29,11 +29,11 @@ module.exports = {
       loader: 'style!css'
     }, {
       test: /\.scss$/,
-      loader: 'style!css!scss'
+      loader: 'style!css!sass'
     }]
   },
   entry: {
-    index: './src/js/src/index.js'
+    index: './src/js/index.js'
   },
   output: {
     path: path.join(__dirname, 'public/js'),
@@ -41,7 +41,7 @@ module.exports = {
       // publicPath:'/js/'
   },
   resolve: {
-    root: path.join(__dirname, '/src/js/src/'),
+    root: path.join(__dirname, '/src'),
     extensions: ['', '.js', '.css', '.scss', 'less', '.ejs', '.png', '.jpg'],
     modulesDirectories: ["node_modules"]
   },

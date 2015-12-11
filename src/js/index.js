@@ -1,15 +1,16 @@
-import React , { Component, PropTypes }from 'react';
+import '../styles/main.scss';
+import React , { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import * as H5Page from './modules/H5Page/App';
+import { Operater as H5PageOperater, Showcase as H5PageShowcase } from './modules/H5Page/App';
 
+import AppReducers from './reducers';
 
-let H5PageReducers = combineReducers(H5Page.reducers);
-let store = createStore(H5PageReducers);
+let store = createStore(AppReducers);
 
-let rootElement = document.getElementById('doto_window');
+let rootElement = document.getElementById('doto_appbox');
 
 // 组件操作区
 class Backstage extends Component{
@@ -17,7 +18,7 @@ class Backstage extends Component{
     const className = 'doto_app_backstage';
     return(
       <div className={className}>
-        <H5Page.Operater />
+        <H5PageOperater />
       </div>
     )
   }
@@ -28,9 +29,9 @@ class Stage extends Component{
     const className = 'doto_app_stage';
     return(
       <div className={className}>
-        <H5Page.Showcase />
+        <H5PageShowcase />
       </div>
-    )
+    );
   }
 }
 // 容器

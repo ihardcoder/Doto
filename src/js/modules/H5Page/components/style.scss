@@ -1,0 +1,74 @@
+.doto_h5page_operater {
+  width: 98%;
+  height: 30px;
+  line-height: 30px;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border: solid 1px #f5da55;
+  margin: 20px auto;
+  font-size: 1.17rem;
+  padding: 0 10px;
+  position: relative;
+
+  .operater_sign {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    margin-top: -10px;
+    background-color: #f5da55;
+  }
+
+  .operater_panel {
+    display: none;
+    position: absolute;
+    top: -2px;
+    width: 100px;
+    right: -105px;
+    background-color: #323330;
+    border: solid 1px #f5da55;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    .operater_list {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      margin: 0;
+      text-align: left;
+    }
+
+    .item_sign {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+    }
+
+    .item_input_box {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      margin-top: -10px;
+    }
+
+    .item_input {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    .operater_item_bakcolor {
+      position: relative;
+
+      .bakcolor_sign {
+      }
+    }
+  }
+}
