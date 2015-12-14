@@ -59,6 +59,21 @@ Backstage.propTypes = {
 
 // 组件展示区
 class Stage extends Component{
+  constructor(){
+    super()
+    this.state = {
+        cur_view: 'iphone'
+    };
+  }
+  changeView(e){
+    let nextView = e.target.innerHTML;
+    if(this.state.cur_view === nextView){
+      return;
+    }
+    this.setState({
+      cur_view: nextView
+    });
+  }
   render(){
     const { dispatch,pageState } = this.props;
     let showcases = [];
@@ -66,9 +81,19 @@ class Stage extends Component{
     for(let i = 0;i<sum;i++){
       showcases.push(<H5Page.Showcase stateData={pageState} index={i} key={i}/>)
     }
+    let className = 'doto_app_stage doto_app_stage_' + this.state.cur_view;
     return(
-      <div className='doto_app_stage'>
+      <div className= {className}>
+        <div className='stage_nav'>
+          <span className='stage_nav_item' onClick={(e)=>this.changeView(e)}>iphone</span>
+          <span className='stage_nav_item' onClick={(e)=>this.changeView(e)}>ipad</span>
+        </div>
         <div className='doto_app_stage_iphone'>
+          <div className='overflowbox'>
+            <div className='contents'>{ showcases }</div>
+          </div>
+        </div>
+        <div className='doto_app_stage_ipad'>
           <div className='overflowbox'>
             <div className='contents'>{ showcases }</div>
           </div>

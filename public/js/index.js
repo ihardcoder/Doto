@@ -190,12 +190,30 @@
 	  function Stage() {
 	    _classCallCheck(this, Stage);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).apply(this, arguments));
+	    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
+
+	    _this4.state = {
+	      cur_view: 'iphone'
+	    };
+	    return _this4;
 	  }
 
 	  _createClass(Stage, [{
+	    key: 'changeView',
+	    value: function changeView(e) {
+	      var nextView = e.target.innerHTML;
+	      if (this.state.cur_view === nextView) {
+	        return;
+	      }
+	      this.setState({
+	        cur_view: nextView
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this5 = this;
+
 	      var _props2 = this.props;
 	      var dispatch = _props2.dispatch;
 	      var pageState = _props2.pageState;
@@ -205,12 +223,44 @@
 	      for (var i = 0; i < sum; i++) {
 	        showcases.push(_react2.default.createElement(H5Page.Showcase, { stateData: pageState, index: i, key: i }));
 	      }
+	      var className = 'doto_app_stage doto_app_stage_' + this.state.cur_view;
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'doto_app_stage' },
+	        { className: className },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'stage_nav' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'stage_nav_item', onClick: function onClick(e) {
+	                return _this5.changeView(e);
+	              } },
+	            'iphone'
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'stage_nav_item', onClick: function onClick(e) {
+	                return _this5.changeView(e);
+	              } },
+	            'ipad'
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'doto_app_stage_iphone' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'overflowbox' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'contents' },
+	              showcases
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'doto_app_stage_ipad' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'overflowbox' },
@@ -312,7 +362,7 @@
 
 
 	// module
-	exports.push([module.id, "html {\n  font-size: 12px;\n  min-height: 100%; }\n\nbody {\n  margin: 0;\n  padding: 0;\n  min-height: 100%; }\n\n.doto_header {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 50px;\n  margin-bottom: 20px;\n  z-index: 999; }\n  .doto_header .doto_header_box {\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 50px;\n    width: 100%;\n    background-color: #323330;\n    color: #f5da55;\n    border-bottom: solid 2px #f5da55; }\n  .doto_header .doto_logo {\n    position: absolute;\n    top: 0;\n    left: 20px;\n    height: 50px;\n    line-height: 50px;\n    font-size: 1.67rem;\n    color: #f5da55; }\n\n.doto_main {\n  padding-top: 50px; }\n\n#doto_appbox .doto_app {\n  padding-left: 220px; }\n\n#doto_appbox .doto_app_backstage {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 200px;\n  height: 100%;\n  padding-top: 50px;\n  box-sizing: border-box;\n  background-color: #323330;\n  color: #f5da55;\n  overflow: hidden; }\n\n#doto_appbox .doto_app_stage .doto_app_stage_iphone {\n  background: url(" + __webpack_require__(4) + ") no-repeat;\n  background-size: 433px;\n  width: 433px;\n  height: 896px;\n  margin: 0 auto;\n  position: relative; }\n  #doto_appbox .doto_app_stage .doto_app_stage_iphone .overflowbox {\n    width: 369px;\n    height: 638px;\n    position: absolute;\n    top: 134px;\n    left: 50%;\n    margin-left: -184px;\n    overflow: hidden; }\n  #doto_appbox .doto_app_stage .doto_app_stage_iphone .contents {\n    position: absolute;\n    top: 0;\n    left: 0;\n    bottom: 0;\n    right: -15px;\n    overflow-y: scroll; }\n\n#doto_appbox .doto_app_stage .doto_app_stage_ipad {\n  background: url(" + __webpack_require__(5) + ") no-repeat; }\n\n.doto_app_backstage_modules {\n  position: absolute;\n  top: 50px;\n  left: 0;\n  bottom: 0;\n  right: -15px;\n  overflow-y: scroll; }\n\n.doto_app_backstage_actions {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  padding: 10px 0;\n  background-color: #323330; }\n  .doto_app_backstage_actions .action_add_Page {\n    position: relative;\n    width: 90%;\n    height: 50px;\n    line-height: 50px;\n    margin: 0 auto;\n    box-sizing: border-box;\n    border: solid 1px #f5da55;\n    text-align: center;\n    cursor: pointer; }\n    .doto_app_backstage_actions .action_add_Page .cover {\n      position: absolute;\n      width: 100%;\n      height: 100%;\n      top: 0;\n      left: 0;\n      display: none; }\n    .doto_app_backstage_actions .action_add_Page .action_text {\n      font-size: 1.17rem; }\n", ""]);
+	exports.push([module.id, "html {\n  font-size: 12px;\n  min-height: 100%; }\n\nbody {\n  margin: 0;\n  padding: 0;\n  min-height: 100%; }\n\n.doto_header {\n  position: relative;\n  top: 0;\n  left: 0;\n  height: 50px;\n  z-index: 999; }\n  .doto_header .doto_header_box {\n    position: fixed;\n    top: 0;\n    left: 0;\n    height: 50px;\n    width: 100%;\n    background-color: #323330;\n    color: #f5da55;\n    border-bottom: solid 2px #f5da55; }\n  .doto_header .doto_logo {\n    position: absolute;\n    top: 0;\n    left: 20px;\n    height: 50px;\n    line-height: 50px;\n    font-size: 1.67rem;\n    color: #f5da55; }\n\n#doto_appbox .doto_app {\n  padding-left: 200px; }\n\n#doto_appbox .doto_app_backstage {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 200px;\n  height: 100%;\n  padding-top: 50px;\n  box-sizing: border-box;\n  background-color: #323330;\n  color: #f5da55;\n  overflow: hidden; }\n\n#doto_appbox .doto_app_stage {\n  position: relative; }\n  #doto_appbox .doto_app_stage_iphone .doto_app_stage_iphone {\n    opacity: 1 !important;\n    z-index: 100; }\n  #doto_appbox .doto_app_stage_ipad .doto_app_stage_ipad {\n    opacity: 1 !important;\n    z-index: 100; }\n  #doto_appbox .doto_app_stage .stage_nav {\n    height: 40px;\n    line-height: 40px;\n    background: #323330;\n    color: #f5da55;\n    font-size: 1.5rem;\n    text-align: center;\n    margin-bottom: 20px; }\n    #doto_appbox .doto_app_stage .stage_nav .stage_nav_item {\n      margin: 0 20px;\n      cursor: pointer; }\n  #doto_appbox .doto_app_stage .doto_app_stage_iphone {\n    opacity: 0;\n    background: url(" + __webpack_require__(4) + ") no-repeat;\n    background-size: 433px;\n    width: 433px;\n    height: 896px;\n    position: absolute;\n    top: 60px;\n    left: 50%;\n    margin-left: -216px;\n    -webkit-transition: all 0.2s ease-in-out;\n    -moz-transition: all 0.2s ease-in-out;\n    -o-transition: all 0.2s ease-in-out;\n    transition: all 0.2s ease-in-out; }\n    #doto_appbox .doto_app_stage .doto_app_stage_iphone .overflowbox {\n      width: 370px;\n      height: 638px;\n      position: absolute;\n      top: 134px;\n      left: 50%;\n      margin-left: -185px;\n      overflow: hidden; }\n    #doto_appbox .doto_app_stage .doto_app_stage_iphone .contents {\n      position: absolute;\n      top: 0;\n      left: 0;\n      bottom: 0;\n      right: -15px;\n      overflow-y: scroll; }\n  #doto_appbox .doto_app_stage .doto_app_stage_ipad {\n    background: url(" + __webpack_require__(5) + ") no-repeat;\n    opacity: 0;\n    width: 588px;\n    height: 834px;\n    background-size: 588px;\n    background-position: 50% 50%;\n    position: absolute;\n    top: 60px;\n    left: 50%;\n    margin-left: -294px;\n    -webkit-transition: all 0.2s ease-in-out;\n    -moz-transition: all 0.2s ease-in-out;\n    -o-transition: all 0.2s ease-in-out;\n    transition: all 0.2s ease-in-out; }\n    #doto_appbox .doto_app_stage .doto_app_stage_ipad .overflowbox {\n      width: 512px;\n      height: 662px;\n      position: absolute;\n      top: 96px;\n      left: 50%;\n      margin-left: -256px;\n      overflow: hidden; }\n    #doto_appbox .doto_app_stage .doto_app_stage_ipad .contents {\n      position: absolute;\n      top: 0;\n      left: 0;\n      bottom: 0;\n      right: -15px;\n      overflow-y: scroll; }\n\n.doto_app_backstage_modules {\n  position: absolute;\n  top: 50px;\n  left: 0;\n  bottom: 0;\n  right: -15px;\n  overflow-y: scroll; }\n\n.doto_app_backstage_actions {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  left: 0;\n  padding: 10px 0;\n  background-color: #323330; }\n  .doto_app_backstage_actions .action_add_Page {\n    position: relative;\n    width: 90%;\n    height: 50px;\n    line-height: 50px;\n    margin: 0 auto;\n    box-sizing: border-box;\n    border: solid 1px #f5da55;\n    text-align: center;\n    cursor: pointer; }\n    .doto_app_backstage_actions .action_add_Page .cover {\n      position: absolute;\n      width: 100%;\n      height: 100%;\n      top: 0;\n      left: 0;\n      display: none; }\n    .doto_app_backstage_actions .action_add_Page .action_text {\n      font-size: 1.17rem; }\n", ""]);
 
 	// exports
 
