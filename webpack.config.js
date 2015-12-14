@@ -8,13 +8,9 @@ module.exports = {
     loaders: [{
       test: /\.(jpe?g|png|gif|svg)$/i,
       loaders: [
-        'image?{bypassOnDebug: true, progressive:true, \
-                optimizationLevel: 3, pngquant:{quality: "65-80"}}',
-        'url?limit=10000&name=img/[hash:8].[name].[ext]',
+        'file?hash=sha512&digest=hex&name=[name].[hash].[ext]',
+            'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
       ]
-    }, {
-      test: /\.(woff|eot|ttf)$/i,
-      loader: 'url?limit=10000&name=fonts/[hash:8].[name].[ext]'
     }, {
       test: /\.js$/,
       exclude: [/node_modules/],

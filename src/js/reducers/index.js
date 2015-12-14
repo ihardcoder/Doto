@@ -1,27 +1,32 @@
 import * as TYPES from '../constants';
 import { combineReducers } from 'redux';
 
+// page初始样式
 const initStyles = {
   backgroundColor: '#555',
-  backgroundImage: '',
-  showcaseWidth: 450,
-  showcaseHeight: 600
+  backgroundImage: ''
 };
+// page初始status - 设置面板关闭；背景色input隐藏
 const initStatus = {
   showSettingPanel: false,
   showBakcolorInput: false
 };
+// @todo page初始动画选型
 const initAnimate = {
   enter: 'normal',
   out: 'normal'
 };
-
+// page初始state
 const pageState = [{
     styles: initStyles,
     status: initStatus,
     animation: initAnimate
 }];
-
+/**
+* @desc page的操作reducers，目前将删减&样式&状态&动画的修改暂时汇总为一个函数
+* @param state
+* @param action
+*/
 function pageConf(state = pageState, action) {
   switch (action.type) {
     case TYPES.DOA.ADD_PAGE:
@@ -40,6 +45,9 @@ function pageConf(state = pageState, action) {
       return state;
   }
 }
+/**
+* @desc 分发函数 - 设置背景色
+*/
 function setBackgroundColor(state,action){
     let _styles = state[action.index].styles;
     _styles = Object.assign({},_styles,{
@@ -53,6 +61,9 @@ function setBackgroundColor(state,action){
       ...state.slice(action.index+1)
     ]
 }
+/**
+* @desc 分发函数 - 设置设置面板的展开与隐藏
+*/
 function toggleSettingPanel(state,action){
   let _status = state[action.index].status;
   _status = Object.assign({},_status,{
@@ -66,6 +77,9 @@ function toggleSettingPanel(state,action){
     ...state.slice(action.index+1)
   ];
 }
+/**
+* @desc 分发函数 - 设置背景色input的显示与隐藏
+*/
 function toggleBakcolorInput(state,action){
   let _status = state[action.index].status;
   _status = Object.assign({},_status,{
@@ -79,115 +93,7 @@ function toggleBakcolorInput(state,action){
     ...state.slice(action.index+1)
   ];
 }
-// function addPage(state=initialState,action){
-//   if(action.type === types.ADD_PAGE){
-//     let _count = state.pageCount+1;
-//     return Object.assign({},state,{
-//       pageCount: _count,
-//       pages:[...state.pages,{
-//         styles: {
-//           backgroundColor: '#555',
-//           backgroundImage: '',
-//           showcaseWidth: 450,
-//           showcaseHeight: 600
-//         },
-//         status: {
-//           showpanel: false,
-//           showBackcolorInput: false
-//         },
-//         animation: {
-//           enter: 'normal',
-//           out: 'normal'
-//         }
-//       }]
-//     });
-//   }
-//   return state;
-// }
-// export function setStyles(state = initialState, action) {
-//   let _styles = state.pages[action.index].styles;
-//   switch (action.type) {
-//     case types.SET_BAK_COLOR:
-//       Object.assign(_styles,{
-//         backgroundColor: action.color
-//       });
-//       return Object.assign({},state,{
-//         pages: [
-//           ...state.pages.slice(0,action.index),
-//           Object.assign({},state.pages[action.index],{
-//             styles: _styles
-//           })
-//           ...state.pages.slice(action.index + 1)
-//         ]
-//       });
-//     case types.SET_BAK_IMAGE:
-//       return [
-//         ...state.slice(0, action.index),
-//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
-//           backgroundImage: action.image
-//         })),
-//         ...state.slice(action.index + 1)
-//       ];
-//     case types.SET_WIDTH:
-//       return [
-//         ...state.slice(0, action.index),
-//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
-//           showcaseWidth: action.width
-//         })),
-//         ...state.slice(action.index + 1)
-//       ];
-//     case types.SET_HEIGHT:
-//       return [
-//         ...state.slice(0, action.index),
-//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
-//           showcaseHeight: action.height
-//         })),
-//         ...state.slice(action.index + 1)
-//       ];
-//     default:
-//       return state;
-//   }
-// }
-// export function setStatus(state=initialState.pages,action){
-//   switch(action.type){
-//     case types.TOGGLEPANEL:
-//       return [
-//         ...state.slice(0, action.index),
-//         Object.assign({},state[action.index],{
-//           status: Object.assign({},state[action.index].status,{
-//             showpanel: action.isshown
-//           })
-//         }),
-//         ...state.slice(action.index + 1)
-//       ];
-//     case types.TOGGLEBAKCOLORINPUT:
-//       return [
-//         ...state.slice(0, action.index),
-//         Object.assign({},state[action.index],{
-//           status:Object.assign({},state[action.index].status,{
-//             showBackcolorInput: action.isshown
-//           })
-//         }),
-//         ...state.slice(action.index + 1)
-//       ];
-//     default:
-//       return state;
-//   }
-// }
-// export function setAnimate(state = initialState.pages, action) {
-//   switch(action.type) {
-//     case types.SET_ANIMATE_OUT:
-//       return Object.assign({}, state, {
-//         out: action.animation
-//       });
-//     case types.SET_ANIMATE_ENTER:
-//       return Object.assign({}, state, {
-//         enter: action.animation
-//       });
-//     default:
-//       return state;
-//   }
-// }
+
 export default combineReducers({
   pageConf
 });

@@ -1,3 +1,4 @@
+
 $colorBlack: #323330;
 $colorYellow: #f5da55;
 $hearderHeight: 50px;
@@ -5,33 +6,37 @@ $headerColor: $colorBlack;
 $headerFontColor: $colorYellow;
 $backstageWidth: 200px;
 
-html{
+html {
   font-size: 12px;
   min-height: 100%;
 }
-body{
+
+body {
   margin: 0;
   padding: 0;
   min-height: 100%;
 }
-.doto_header{
+
+.doto_header {
   position: relative;
   top: 0;
   left: 0;
   height: $hearderHeight;
   margin-bottom: 20px;
   z-index: 999;
-  .doto_header_box{
+
+  .doto_header_box {
     position: fixed;
     top: 0;
-    left:0;
+    left: 0;
     height: $hearderHeight;
     width: 100%;
     background-color: $headerColor;
     color: $headerFontColor;
     border-bottom: solid 2px $headerFontColor;
   }
-  .doto_logo{
+
+  .doto_logo {
     position: absolute;
     top: 0;
     left: 20px;
@@ -41,22 +46,99 @@ body{
     color: $headerFontColor;
   }
 }
-.doto_main{
+
+.doto_main {
   padding-top: $hearderHeight;
 }
-#doto_appbox{
-  .doto_app{
+
+#doto_appbox {
+  .doto_app {
     padding-left: $backstageWidth+20px;
   }
-  .doto_app_backstage{
+
+  .doto_app_backstage {
     position: fixed;
     top: 0;
     left: 0;
     width: $backstageWidth;
-    min-height: 100%;
+    height: 100%;
     padding-top: $hearderHeight;
     box-sizing: border-box;
     background-color: $colorBlack;
     color: $colorYellow;
+    overflow: hidden;
+  }
+  .doto_app_stage{
+    .doto_app_stage_iphone{
+      background: url('../res/img/iphone.png') no-repeat;
+      background-size: 433px;
+      width: 433px;
+      height: 896px;
+      margin: 0 auto;
+      position: relative;
+      .overflowbox{
+        width: 369px;
+        height: 638px;
+        position: absolute;
+        top: 134px;
+        left: 50%;
+        margin-left: -184px;
+        overflow: hidden;
+      }
+      .contents{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: -15px;
+        overflow-y: scroll;
+      }
+    }
+    .doto_app_stage_ipad{
+      background: url('../res/img/ipad.png') no-repeat;
+    }
+  }
+}
+
+.doto_app_backstage_modules {
+  position: absolute;
+  top: $hearderHeight;
+  left: 0;
+  bottom: 0;
+  right: -15px;
+  overflow-y: scroll;
+}
+
+.doto_app_backstage_actions {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  padding: 10px 0;
+  background-color: $colorBlack;
+
+  .action_add_Page {
+    position: relative;
+    width: 90%;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    border: solid 1px $colorYellow;
+    text-align: center;
+    cursor: pointer;
+
+    .cover {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: none;
+    }
+
+    .action_text {
+      font-size: 1.17rem;
+    }
   }
 }

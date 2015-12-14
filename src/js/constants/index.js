@@ -1,30 +1,16 @@
-export const ADD_PAGE = 'ADD_PAGE';
-// styles
-export const SET_BAK_COLOR = 'SET_BAK_COLOR';
-export const SET_BAK_IMAGE = 'SET_BAK_IMAGE';
-export const SET_WIDTH = 'SET_WIDTH';
-export const SET_HEIGHT = 'SET_HEIGHT';
-
-// status
-export const TOGGLEPANEL = 'TOGGLEPANEL';
-export const TOGGLEBAKCOLORINPUT = 'TOGGLEBAKCOLORINPUT';
-
-// animations
-export const SET_ANIMATE_ENTER = 'SET_ANIMATE_ENTER';
-export const SET_ANIMATE_OUT = 'SET_ANIMATE_OUT';
-
+// 页面删减action
 export const DOA = {
   ADD_PAGE: 'ADD_PAGE',
   DEL_PAGE: 'DEL_PAGE'
 };
-
+// 设置style action
 export const SET_STYLES = {
   SET_BAK_COLOR: 'SET_BAK_COLOR',
   SET_BAK_IMAGE: 'SET_BAK_IMAGE',
   SET_WIDTH: 'SET_WIDTH',
   SET_HEIGHT: 'SET_HEIGHT'
 };
-
+// 设置状态 action
 export const SET_STATUS = {
   TOGGLE_SETTING_PANEL: 'TOGGLE_SETTING_PANEL',
   TOGGLE_BAKCOLOR_INPUT: 'TOGGLE_BAKCOLOR_INPUT'

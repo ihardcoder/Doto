@@ -2,17 +2,16 @@ import './style.scss';
 import React, { Component, PropTypes } from 'react';
 
 /**
-* @desc 操作区组件
+* @desc page操作区组件
 */
 export class Operater extends Component{
-  // 设置面板的展示与收起
-  togglePanel(e){
-    console.log('togglePanel');
+  // 设置面板的展示&收起
+  toggleSettingPanel(e){
     let nextStatus = !this.props.stateData[this.props.index].status.showSettingPanel ? true : false;
-    this.props.setStatus(nextStatus,this.props.index);
+    this.props.toggleSettingPanel(nextStatus,this.props.index);
   }
+  // 背景色input的显示&隐藏
   toggleBakcolorInput(e){
-    console.log('toggleBakcolorInput');
     if(e.target.tagName === 'INPUT' && e.keyCode !== 13){
       return;
     }
@@ -21,16 +20,24 @@ export class Operater extends Component{
   }
   // 设置背景颜色
   setBakcolor(e){
-    console.log('setBakcolor');
     let color = '';
     color = e.target.value;
     this.props.setBakcolor(color,this.props.index);
   }
+  // 隐藏所有设置面板
+  hideAllPanels(e){
+    this.props.toggleSettingPanel(false,this.props.index);
+    this.props.toggleBakcolorInput(false,this.props.index);
+  }
   render(){
     const className = 'doto_h5page_operater' + (this.props.className || '');
     return(
-      <div className={className}>
-        <div className='operater_sign' onClick = {(e)=>this.togglePanel(e)}></div>
+      <div className={className} style={{
+        backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor
+      }}
+      onMouseLeave = {(e)=>this.hideAllPanels(e)}>
+        <div className='operater_cover'></div>
+        <div className='operater_setting' onClick = {(e)=>this.toggleSettingPanel(e)}><i className='doto_h5page_icon doto_h5page_icon_setting'></i></div>
         <div className='operater_panel' style={{
           display:this.props.stateData[this.props.index].status.showSettingPanel? 'block':'none'
         }}>
@@ -53,15 +60,9 @@ export class Operater extends Component{
                 backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
               }}></div>
             </li>
-            <li className='operater_item operater_item_width'>
-              <span>宽度</span>
-            </li>
-            <li className='operater_item operater_item_height'>
-              <span>高度</span>
-            </li>
           </ul>
         </div>
-        <span>Page</span>
+        <span>页面 {this.props.index+1}</span>
       </div>
     );
   }

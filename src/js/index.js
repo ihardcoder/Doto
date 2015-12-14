@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider,connect } from 'react-redux';
 
-import { setBakColor,setStatus,toggleBakcolorInput,addPage } from './actions';
+import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage } from './actions';
 import * as H5Page from './components/H5Page';
 import AppReducers from './reducers';
 
@@ -12,6 +12,18 @@ let store = createStore(AppReducers);
 
 let rootElement = document.getElementById('doto_appbox');
 
+class AddAction extends Component{
+  render(){
+    return(
+      <div className='action_add_Page'>
+        <div className='cover'></div>
+        <div className='action_add' onClick={(e)=>this.props.addPage(e)}>
+          <div className='action_text'>添加页面</div>
+        </div>
+      </div>
+    );
+  }
+}
 
 // 组件操作区
 class Backstage extends Component{
@@ -23,7 +35,7 @@ class Backstage extends Component{
     for(let i = 0;i<sum;i++){
       operaters.push(<H5Page.Operater
         setBakcolor={(color,index) => dispatch(setBakColor(color,index))}
-        setStatus = {(isshown,index) => dispatch(setStatus(isshown,index))}
+        toggleSettingPanel = {(isshown,index) => dispatch(toggleSettingPanel(isshown,index))}
         toggleBakcolorInput = {(isshown,index) => dispatch(toggleBakcolorInput(isshown,index))}
         stateData={pageState}
         index={i}
@@ -31,48 +43,56 @@ class Backstage extends Component{
     }
     return(
       <div className={className}>
-        <div className='doto_app_backstage_actions'>
-          <button className='action_add_H5Page' onClick={(e)=>dispatch(addPage(e))}>添加页面</button>
-        </div>
         <div className = 'doto_app_backstage_modules'>
           { operaters }
+        </div>
+        <div className='doto_app_backstage_actions'>
+          <AddAction addPage={()=>dispatch(addPage())}/>
         </div>
       </div>
     )
   }
 }
-// Backstage.propTypes = {
-//   pages: PropTypes.array.isRequired
-// }
+Backstage.propTypes = {
+  pageState: PropTypes.array.isRequired
+}
 
 // 组件展示区
 class Stage extends Component{
   render(){
     const { dispatch,pageState } = this.props;
-    const className = 'doto_app_stage';
     let showcases = [];
     let sum = pageState.length;
     for(let i = 0;i<sum;i++){
       showcases.push(<H5Page.Showcase stateData={pageState} index={i} key={i}/>)
     }
     return(
-      <div className={className}>
-        { showcases }
+      <div className='doto_app_stage'>
+        <div className='doto_app_stage_iphone'>
+          <div className='overflowbox'>
+            <div className='contents'>{ showcases }</div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
+Stage.propTypes = {
+  pageState: PropTypes.array.isRequired
+}
+// 简单的select函数
+// @todo 后期可修改为reselect
 function select(state) {
   return {
     pageState: state.pageConf
   };
 }
-
+// react-redux连接react组件与redux
 const AppBackstage = connect(select)(Backstage);
 const AppStage = connect(select)(Stage);
 
-// 容器
+// App容器
 class App extends Component{
   render(){
     const className = 'doto_app';
