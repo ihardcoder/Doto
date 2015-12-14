@@ -60,11 +60,17 @@
 
 	var _reactRedux = __webpack_require__(172);
 
-	var _App = __webpack_require__(181);
+	var _actions = __webpack_require__(181);
 
-	var _reducers = __webpack_require__(188);
+	var _H5Page = __webpack_require__(183);
+
+	var H5Page = _interopRequireWildcard(_H5Page);
+
+	var _reducers = __webpack_require__(186);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93,16 +99,56 @@
 	    key: 'render',
 	    value: function render() {
 	      var className = 'doto_app_backstage';
+	      var _props = this.props;
+	      var dispatch = _props.dispatch;
+	      var pageState = _props.pageState;
+
+	      var operaters = [];
+	      var sum = pageState.length;
+	      for (var i = 0; i < sum; i++) {
+	        operaters.push(_react2.default.createElement(H5Page.Operater, {
+	          setBakcolor: function setBakcolor(color, index) {
+	            return dispatch((0, _actions.setBakColor)(color, index));
+	          },
+	          setStatus: function setStatus(isshown, index) {
+	            return dispatch((0, _actions.setStatus)(isshown, index));
+	          },
+	          toggleBakcolorInput: function toggleBakcolorInput(isshown, index) {
+	            return dispatch((0, _actions.toggleBakcolorInput)(isshown, index));
+	          },
+	          stateData: pageState,
+	          index: i,
+	          key: i }));
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { className: className },
-	        _react2.default.createElement(_App.Operater, null)
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'doto_app_backstage_actions' },
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'action_add_H5Page', onClick: function onClick(e) {
+	                return dispatch((0, _actions.addPage)(e));
+	              } },
+	            '添加页面'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'doto_app_backstage_modules' },
+	          operaters
+	        )
 	      );
 	    }
 	  }]);
 
 	  return Backstage;
 	})(_react.Component);
+	// Backstage.propTypes = {
+	//   pages: PropTypes.array.isRequired
+	// }
+
 	// 组件展示区
 
 	var Stage = (function (_Component2) {
@@ -117,17 +163,36 @@
 	  _createClass(Stage, [{
 	    key: 'render',
 	    value: function render() {
+	      var _props2 = this.props;
+	      var dispatch = _props2.dispatch;
+	      var pageState = _props2.pageState;
+
 	      var className = 'doto_app_stage';
+	      var showcases = [];
+	      var sum = pageState.length;
+	      for (var i = 0; i < sum; i++) {
+	        showcases.push(_react2.default.createElement(H5Page.Showcase, { stateData: pageState, index: i, key: i }));
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        { className: className },
-	        _react2.default.createElement(_App.Showcase, null)
+	        showcases
 	      );
 	    }
 	  }]);
 
 	  return Stage;
 	})(_react.Component);
+
+	function select(state) {
+	  return {
+	    pageState: state.pageConf
+	  };
+	}
+
+	var AppBackstage = (0, _reactRedux.connect)(select)(Backstage);
+	var AppStage = (0, _reactRedux.connect)(select)(Stage);
+
 	// 容器
 
 	var App = (function (_Component3) {
@@ -146,8 +211,8 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: className },
-	        _react2.default.createElement(Backstage, null),
-	        _react2.default.createElement(Stage, null)
+	        _react2.default.createElement(AppBackstage, null),
+	        _react2.default.createElement(AppStage, null)
 	      );
 	    }
 	  }]);
@@ -21257,160 +21322,64 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reducers = exports.Showcase = exports.Operater = undefined;
-
-	var _react = __webpack_require__(5);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(172);
-
-	var _actions = __webpack_require__(182);
-
-	var _H5Page = __webpack_require__(184);
-
-	var H5Page = _interopRequireWildcard(_H5Page);
-
-	var _reducers2 = __webpack_require__(187);
-
-	var _reducers = _interopRequireWildcard(_reducers2);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AppOperater = (function (_Component) {
-	  _inherits(AppOperater, _Component);
-
-	  function AppOperater() {
-	    _classCallCheck(this, AppOperater);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AppOperater).apply(this, arguments));
-	  }
-
-	  _createClass(AppOperater, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var dispatch = _props.dispatch;
-	      var styles = _props.styles;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(H5Page.Operater, {
-	          setBakcolor: function setBakcolor(color) {
-	            return dispatch((0, _actions.setBakColor)(color));
-	          },
-	          setStatus: function setStatus(isshown) {
-	            return dispatch((0, _actions.setStatus)(isshown));
-	          },
-	          toggleBakcolorInput: function toggleBakcolorInput(isshown) {
-	            return dispatch((0, _actions.toggleBakcolorInput)(isshown));
-	          },
-	          styles: this.props.styles,
-	          status: this.props.status
-	        })
-	      );
-	    }
-	  }]);
-
-	  return AppOperater;
-	})(_react.Component);
-
-	AppOperater.propTypes = {
-	  styles: _react.PropTypes.object.isRequired,
-	  status: _react.PropTypes.object.isRequired
-	};
-
-	var AppShowcase = (function (_Component2) {
-	  _inherits(AppShowcase, _Component2);
-
-	  function AppShowcase() {
-	    _classCallCheck(this, AppShowcase);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AppShowcase).apply(this, arguments));
-	  }
-
-	  _createClass(AppShowcase, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props2 = this.props;
-	      var dispatch = _props2.dispatch;
-	      var styles = _props2.styles;
-	      var status = _props2.status;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(H5Page.Showcase, { styles: this.props.styles })
-	      );
-	    }
-	  }]);
-
-	  return AppShowcase;
-	})(_react.Component);
-
-	AppShowcase.propTypes = {
-	  styles: _react.PropTypes.object.isRequired
-	};
-
-	function select(state) {
-	  return {
-	    styles: state.setStyles,
-	    status: state.setStatus
-	  };
-	}
-
-	var Operater = exports.Operater = (0, _reactRedux.connect)(select)(AppOperater);
-
-	var Showcase = exports.Showcase = (0, _reactRedux.connect)(select)(AppShowcase);
-
-	exports.reducers = _reducers;
-
-/***/ },
-/* 182 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.addPage = addPage;
 	exports.setBakColor = setBakColor;
 	exports.setStatus = setStatus;
 	exports.toggleBakcolorInput = toggleBakcolorInput;
 
-	var _constants = __webpack_require__(183);
+	var _constants = __webpack_require__(182);
 
-	var types = _interopRequireWildcard(_constants);
+	var TYPES = _interopRequireWildcard(_constants);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	function setBakColor(color) {
-	  return { type: types.SET_BAK_COLOR, color: color };
+	function addPage() {
+	  return {
+	    type: TYPES.DOA.ADD_PAGE
+	  };
 	}
-	function setStatus(isshown) {
-	  return { type: types.TOGGLEPANEL, isshown: isshown };
+	function setBakColor(color, index) {
+	  return { type: TYPES.SET_STYLES.SET_BAK_COLOR, color: color, index: index };
+	}
+	function setStatus(nextStatus, index) {
+	  return { type: TYPES.SET_STATUS.TOGGLE_SETTING_PANEL, nextStatus: nextStatus, index: index };
 	}
 
-	function toggleBakcolorInput(isshown) {
-	  return { type: types.TOGGLEBAKCOLORINPUT, isshown: isshown };
+	function toggleBakcolorInput(nextStatus, index) {
+	  return { type: TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT, nextStatus: nextStatus, index: index };
 	}
+
+	// export function doa(action,index){
+	//   return {
+	//     type: TYPES.DOA,
+	//     action,
+	//     index
+	//   };
+	// }
+
+	// export function setStyles(action,opts,index){
+	//   return {
+	//     type: TYPES.SET_STYLES,
+	//     action,
+	//     opts,
+	//     index
+	//   }
+	// }
+	//
+	// export function setStatus(action,opts,index){
+	//   return {
+	//     type: TYPES.SET_STATUS,
+	//     action,
+	//     opts,
+	//     index
+	//   }
+	// }
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21418,6 +21387,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var ADD_PAGE = exports.ADD_PAGE = 'ADD_PAGE';
 	// styles
 	var SET_BAK_COLOR = exports.SET_BAK_COLOR = 'SET_BAK_COLOR';
 	var SET_BAK_IMAGE = exports.SET_BAK_IMAGE = 'SET_BAK_IMAGE';
@@ -21432,8 +21402,25 @@
 	var SET_ANIMATE_ENTER = exports.SET_ANIMATE_ENTER = 'SET_ANIMATE_ENTER';
 	var SET_ANIMATE_OUT = exports.SET_ANIMATE_OUT = 'SET_ANIMATE_OUT';
 
+	var DOA = exports.DOA = {
+	  ADD_PAGE: 'ADD_PAGE',
+	  DEL_PAGE: 'DEL_PAGE'
+	};
+
+	var SET_STYLES = exports.SET_STYLES = {
+	  SET_BAK_COLOR: 'SET_BAK_COLOR',
+	  SET_BAK_IMAGE: 'SET_BAK_IMAGE',
+	  SET_WIDTH: 'SET_WIDTH',
+	  SET_HEIGHT: 'SET_HEIGHT'
+	};
+
+	var SET_STATUS = exports.SET_STATUS = {
+	  TOGGLE_SETTING_PANEL: 'TOGGLE_SETTING_PANEL',
+	  TOGGLE_BAKCOLOR_INPUT: 'TOGGLE_BAKCOLOR_INPUT'
+	};
+
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21445,7 +21432,7 @@
 	});
 	exports.Showcase = exports.Operater = undefined;
 
-	__webpack_require__(185);
+	__webpack_require__(184);
 
 	var _react = __webpack_require__(5);
 
@@ -21478,8 +21465,8 @@
 	    // 设置面板的展示与收起
 	    value: function togglePanel(e) {
 	      console.log('togglePanel');
-	      var isShown = !this.props.status.showpanel ? true : false;
-	      this.props.setStatus(isShown);
+	      var nextStatus = !this.props.stateData[this.props.index].status.showSettingPanel ? true : false;
+	      this.props.setStatus(nextStatus, this.props.index);
 	    }
 	  }, {
 	    key: 'toggleBakcolorInput',
@@ -21488,8 +21475,8 @@
 	      if (e.target.tagName === 'INPUT' && e.keyCode !== 13) {
 	        return;
 	      }
-	      var isShown = !this.props.status.showBackcolorInput ? true : false;
-	      this.props.toggleBakcolorInput(isShown);
+	      var nextStatus = !this.props.stateData[this.props.index].status.showBakcolorInput ? true : false;
+	      this.props.toggleBakcolorInput(nextStatus, this.props.index);
 	    }
 	    // 设置背景颜色
 
@@ -21499,7 +21486,7 @@
 	      console.log('setBakcolor');
 	      var color = '';
 	      color = e.target.value;
-	      this.props.setBakcolor(color);
+	      this.props.setBakcolor(color, this.props.index);
 	    }
 	  }, {
 	    key: 'render',
@@ -21516,7 +21503,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'operater_panel', style: {
-	              display: this.props.status.showpanel ? 'block' : 'none'
+	              display: this.props.stateData[this.props.index].status.showSettingPanel ? 'block' : 'none'
 	            } },
 	          _react2.default.createElement(
 	            'ul',
@@ -21530,7 +21517,7 @@
 	                '背景色'
 	              ),
 	              _react2.default.createElement('div', { className: 'item_sign bakcolor_sign', style: {
-	                  backgroundColor: this.props.styles.backgroundColor
+	                  backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor
 	                },
 	                onClick: function onClick(e) {
 	                  return _this2.toggleBakcolorInput(e);
@@ -21538,7 +21525,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'item_input_box', style: {
-	                    display: this.props.status.showBackcolorInput ? 'block' : 'none'
+	                    display: this.props.stateData[this.props.index].status.showBakcolorInput ? 'block' : 'none'
 	                  } },
 	                _react2.default.createElement('input', { className: 'item_input', onChange: function onChange(e) {
 	                    return _this2.setBakcolor(e);
@@ -21556,7 +21543,7 @@
 	                '背景图片'
 	              ),
 	              _react2.default.createElement('div', { className: 'bakcolor_sign', style: {
-	                  backgroundImage: this.props.styles.backgroundImage
+	                  backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
 	                } })
 	            ),
 	            _react2.default.createElement(
@@ -21617,10 +21604,10 @@
 	        'div',
 	        { className: className,
 	          style: {
-	            width: this.props.styles.showcaseWidth,
-	            height: this.props.styles.showcaseHeight,
-	            backgroundColor: this.props.styles.backgroundColor,
-	            backgroundImage: this.props.styles.backgroundImage
+	            width: this.props.stateData[this.props.index].styles.showcaseWidth,
+	            height: this.props.stateData[this.props.index].styles.showcaseHeight,
+	            backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor,
+	            backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
 	          } },
 	        this.props.children
 	      );
@@ -21636,13 +21623,13 @@
 	};
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(186);
+	var content = __webpack_require__(185);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(4)(content, {});
@@ -21651,8 +21638,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/sass-loader/index.js!./style.scss", function() {
-				var newContent = require("!!./../../../../../node_modules/css-loader/index.js!./../../../../../node_modules/sass-loader/index.js!./style.scss");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./style.scss", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/sass-loader/index.js!./style.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -21662,7 +21649,7 @@
 	}
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(3)();
@@ -21670,13 +21657,13 @@
 
 
 	// module
-	exports.push([module.id, ".doto_h5page_operater {\n  width: 98%;\n  height: 30px;\n  line-height: 30px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative; }\n  .doto_h5page_operater .operater_sign {\n    width: 20px;\n    height: 20px;\n    position: absolute;\n    top: 50%;\n    right: 5px;\n    margin-top: -10px;\n    background-color: #f5da55; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: -2px;\n    width: 100px;\n    right: -105px;\n    background-color: #323330;\n    border: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n", ""]);
+	exports.push([module.id, ".doto_h5page_operater {\n  width: 98%;\n  height: 30px;\n  line-height: 30px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative; }\n  .doto_h5page_operater .operater_sign {\n    width: 20px;\n    height: 20px;\n    position: absolute;\n    top: 50%;\n    right: 5px;\n    margin-top: -10px;\n    background-color: #f5da55; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: -2px;\n    width: 100px;\n    right: -105px;\n    background-color: #323330;\n    border: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n\n.doto_h5page_showcase {\n  background-color: #323330; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21684,108 +21671,198 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.setStyles = setStyles;
-	exports.setStatus = setStatus;
-	exports.setAnimate = setAnimate;
 
-	var _constants = __webpack_require__(183);
+	var _constants = __webpack_require__(182);
 
-	var types = _interopRequireWildcard(_constants);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	var initialState = {
-	  styles: {
-	    backgroundColor: '#555',
-	    backgroundImage: '',
-	    showcaseWidth: 450,
-	    showcaseHeight: 600
-	  },
-	  status: {
-	    showpanel: false,
-	    showBackcolorInput: false
-	  },
-	  animation: {
-	    enter: 'normal',
-	    out: 'normal'
-	  }
-	};
-
-	function setStyles() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.styles : arguments[0];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case types.SET_BAK_COLOR:
-	      return Object.assign({}, state, {
-	        backgroundColor: action.color
-	      });
-	    case types.SET_BAK_IMAGE:
-	      return Object.assign({}, state, {
-	        backgroundImage: action.image
-	      });
-	    case types.SET_WIDTH:
-	      return Object.assign({}, state, {
-	        showcaseWidth: action.width
-	      });
-	    case types.SET_HEIGHT:
-	      return Object.assign({}, state, {
-	        showcaseHeight: action.height
-	      });
-	    default:
-	      return state;
-	  }
-	}
-	function setStatus() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.status : arguments[0];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case types.TOGGLEPANEL:
-	      return Object.assign({}, state, {
-	        showpanel: action.isshown
-	      });
-	    case types.TOGGLEBAKCOLORINPUT:
-	      return Object.assign({}, state, {
-	        showBackcolorInput: action.isshown
-	      });
-	    default:
-	      return state;
-	  }
-	}
-	function setAnimate() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.animation : arguments[0];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case types.SET_ANIMATE_OUT:
-	      return Object.assign({}, state, {
-	        out: action.animation
-	      });
-	    case types.SET_ANIMATE_ENTER:
-	      return Object.assign({}, state, {
-	        enter: action.animation
-	      });
-	    default:
-	      return state;
-	  }
-	}
-
-/***/ },
-/* 188 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	var TYPES = _interopRequireWildcard(_constants);
 
 	var _redux = __webpack_require__(163);
 
-	var _App = __webpack_require__(181);
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	exports.default = (0, _redux.combineReducers)(_App.reducers);
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var initStyles = {
+	  backgroundColor: '#555',
+	  backgroundImage: '',
+	  showcaseWidth: 450,
+	  showcaseHeight: 600
+	};
+	var initStatus = {
+	  showSettingPanel: false,
+	  showBakcolorInput: false
+	};
+	var initAnimate = {
+	  enter: 'normal',
+	  out: 'normal'
+	};
+
+	var pageState = [{
+	  styles: initStyles,
+	  status: initStatus,
+	  animation: initAnimate
+	}];
+
+	function pageConf() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? pageState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case TYPES.DOA.ADD_PAGE:
+	      return [].concat(_toConsumableArray(state), [{
+	        styles: initStyles,
+	        status: initStatus,
+	        animation: initAnimate
+	      }]);
+	    case TYPES.SET_STYLES.SET_BAK_COLOR:
+	      return setBackgroundColor(state, action);
+	    case TYPES.SET_STATUS.TOGGLE_SETTING_PANEL:
+	      return toggleSettingPanel(state, action);
+	    case TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT:
+	      return toggleBakcolorInput(state, action);
+	    default:
+	      return state;
+	  }
+	}
+	function setBackgroundColor(state, action) {
+	  var _styles = state[action.index].styles;
+	  _styles = Object.assign({}, _styles, {
+	    backgroundColor: action.color
+	  });
+	  return [].concat(_toConsumableArray(state.slice(0, action.index)), [Object.assign({}, state[action.index], {
+	    styles: _styles
+	  })], _toConsumableArray(state.slice(action.index + 1)));
+	}
+	function toggleSettingPanel(state, action) {
+	  var _status = state[action.index].status;
+	  _status = Object.assign({}, _status, {
+	    showSettingPanel: action.nextStatus
+	  });
+	  return [].concat(_toConsumableArray(state.slice(0, action.index)), [Object.assign({}, state[action.index], {
+	    status: _status
+	  })], _toConsumableArray(state.slice(action.index + 1)));
+	}
+	function toggleBakcolorInput(state, action) {
+	  var _status = state[action.index].status;
+	  _status = Object.assign({}, _status, {
+	    showBakcolorInput: action.nextStatus
+	  });
+	  return [].concat(_toConsumableArray(state.slice(0, action.index)), [Object.assign({}, state[action.index], {
+	    status: _status
+	  })], _toConsumableArray(state.slice(action.index + 1)));
+	}
+	// function addPage(state=initialState,action){
+	//   if(action.type === types.ADD_PAGE){
+	//     let _count = state.pageCount+1;
+	//     return Object.assign({},state,{
+	//       pageCount: _count,
+	//       pages:[...state.pages,{
+	//         styles: {
+	//           backgroundColor: '#555',
+	//           backgroundImage: '',
+	//           showcaseWidth: 450,
+	//           showcaseHeight: 600
+	//         },
+	//         status: {
+	//           showpanel: false,
+	//           showBackcolorInput: false
+	//         },
+	//         animation: {
+	//           enter: 'normal',
+	//           out: 'normal'
+	//         }
+	//       }]
+	//     });
+	//   }
+	//   return state;
+	// }
+	// export function setStyles(state = initialState, action) {
+	//   let _styles = state.pages[action.index].styles;
+	//   switch (action.type) {
+	//     case types.SET_BAK_COLOR:
+	//       Object.assign(_styles,{
+	//         backgroundColor: action.color
+	//       });
+	//       return Object.assign({},state,{
+	//         pages: [
+	//           ...state.pages.slice(0,action.index),
+	//           Object.assign({},state.pages[action.index],{
+	//             styles: _styles
+	//           })
+	//           ...state.pages.slice(action.index + 1)
+	//         ]
+	//       });
+	//     case types.SET_BAK_IMAGE:
+	//       return [
+	//         ...state.slice(0, action.index),
+	//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
+	//           backgroundImage: action.image
+	//         })),
+	//         ...state.slice(action.index + 1)
+	//       ];
+	//     case types.SET_WIDTH:
+	//       return [
+	//         ...state.slice(0, action.index),
+	//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
+	//           showcaseWidth: action.width
+	//         })),
+	//         ...state.slice(action.index + 1)
+	//       ];
+	//     case types.SET_HEIGHT:
+	//       return [
+	//         ...state.slice(0, action.index),
+	//         Object.assign({}, state[action.index], Object.assign({},state[action.index].styles,{
+	//           showcaseHeight: action.height
+	//         })),
+	//         ...state.slice(action.index + 1)
+	//       ];
+	//     default:
+	//       return state;
+	//   }
+	// }
+	// export function setStatus(state=initialState.pages,action){
+	//   switch(action.type){
+	//     case types.TOGGLEPANEL:
+	//       return [
+	//         ...state.slice(0, action.index),
+	//         Object.assign({},state[action.index],{
+	//           status: Object.assign({},state[action.index].status,{
+	//             showpanel: action.isshown
+	//           })
+	//         }),
+	//         ...state.slice(action.index + 1)
+	//       ];
+	//     case types.TOGGLEBAKCOLORINPUT:
+	//       return [
+	//         ...state.slice(0, action.index),
+	//         Object.assign({},state[action.index],{
+	//           status:Object.assign({},state[action.index].status,{
+	//             showBackcolorInput: action.isshown
+	//           })
+	//         }),
+	//         ...state.slice(action.index + 1)
+	//       ];
+	//     default:
+	//       return state;
+	//   }
+	// }
+	// export function setAnimate(state = initialState.pages, action) {
+	//   switch(action.type) {
+	//     case types.SET_ANIMATE_OUT:
+	//       return Object.assign({}, state, {
+	//         out: action.animation
+	//       });
+	//     case types.SET_ANIMATE_ENTER:
+	//       return Object.assign({}, state, {
+	//         enter: action.animation
+	//       });
+	//     default:
+	//       return state;
+	//   }
+	// }
+	exports.default = (0, _redux.combineReducers)({
+	  pageConf: pageConf
+	});
 
 /***/ }
 /******/ ]);

@@ -6,7 +6,7 @@ import * as H5Page from './components/H5Page';
 
 class AppOperater extends Component {
   render() {
-    const { dispatch ,styles} = this.props;
+    const { dispatch,styles} = this.props;
     return (
       <div>
         <H5Page.Operater
@@ -28,7 +28,7 @@ AppOperater.propTypes = {
 
 class AppShowcase extends Component {
   render() {
-    const { dispatch ,styles,status} = this.props;
+    const { dispatch,styles,status} = this.props;
     return (
       <div>
         <H5Page.Showcase  styles={this.props.styles} />
@@ -48,7 +48,7 @@ function select(state) {
   };
 }
 
-export const Operater = connect(select)(AppOperater)
+export const Operater = connect(select)(AppOperater);
 
 export const Showcase = connect(select)(AppShowcase);
 

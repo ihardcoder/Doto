@@ -1,23 +1,23 @@
 import * as types from '../constants';
 
-const initialState = {
-  styles: {
-      backgroundColor: '#555',
-      backgroundImage:'',
-      showcaseWidth:450,
-      showcaseHeight:600
-  },
-  status:{
-    showpanel: false,
-    showBackcolorInput: false
-  },
-  animation:{
-    enter: 'normal',
-    out: 'normal'
-  }
-};
+// const initialState = {
+//   styles: {
+//       backgroundColor: '#555',
+//       backgroundImage:'',
+//       showcaseWidth:450,
+//       showcaseHeight:600
+//   },
+//   status:{
+//     showpanel: false,
+//     showBackcolorInput: false
+//   },
+//   animation:{
+//     enter: 'normal',
+//     out: 'normal'
+//   }
+// };
 
-export function setStyles(state = initialState.styles, action) {
+export function setStyles(state = {}, action) {
   switch (action.type) {
     case types.SET_BAK_COLOR:
       return Object.assign({}, state, {
@@ -39,7 +39,7 @@ export function setStyles(state = initialState.styles, action) {
       return state;
   }
 }
-export function setStatus(state=initialState.status,action){
+export function setStatus(state={},action){
   switch(action.type){
     case types.TOGGLEPANEL:
       return Object.assign({},state,{
@@ -53,7 +53,7 @@ export function setStatus(state=initialState.status,action){
       return state;
   }
 }
-export function setAnimate(state = initialState.animation, action) {
+export function setAnimate(state = {}, action) {
   switch(action.type) {
     case types.SET_ANIMATE_OUT:
       return Object.assign({}, state, {

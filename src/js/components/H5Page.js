@@ -8,23 +8,23 @@ export class Operater extends Component{
   // 设置面板的展示与收起
   togglePanel(e){
     console.log('togglePanel');
-    let isShown = !this.props.status.showpanel ? true : false;
-    this.props.setStatus(isShown);
+    let nextStatus = !this.props.stateData[this.props.index].status.showSettingPanel ? true : false;
+    this.props.setStatus(nextStatus,this.props.index);
   }
   toggleBakcolorInput(e){
     console.log('toggleBakcolorInput');
     if(e.target.tagName === 'INPUT' && e.keyCode !== 13){
       return;
     }
-    let isShown = !this.props.status.showBackcolorInput ? true : false;
-    this.props.toggleBakcolorInput(isShown);
+    let nextStatus = !this.props.stateData[this.props.index].status.showBakcolorInput ? true : false;
+    this.props.toggleBakcolorInput(nextStatus,this.props.index);
   }
   // 设置背景颜色
   setBakcolor(e){
     console.log('setBakcolor');
     let color = '';
     color = e.target.value;
-    this.props.setBakcolor(color);
+    this.props.setBakcolor(color,this.props.index);
   }
   render(){
     const className = 'doto_h5page_operater' + (this.props.className || '');
@@ -32,17 +32,17 @@ export class Operater extends Component{
       <div className={className}>
         <div className='operater_sign' onClick = {(e)=>this.togglePanel(e)}></div>
         <div className='operater_panel' style={{
-          display:this.props.status.showpanel? 'block':'none'
+          display:this.props.stateData[this.props.index].status.showSettingPanel? 'block':'none'
         }}>
           <ul className='operater_list'>
             <li className='operater_item operater_item_bakcolor'>
               <span>背景色</span>
               <div className='item_sign bakcolor_sign' style={{
-                backgroundColor: this.props.styles.backgroundColor
+                backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor
               }}
               onClick = {(e)=>this.toggleBakcolorInput(e)}></div>
               <div className='item_input_box' style={{
-                display:this.props.status.showBackcolorInput? 'block':'none'
+                display:this.props.stateData[this.props.index].status.showBakcolorInput? 'block':'none'
               }}>
                 <input className='item_input' onChange={(e)=>this.setBakcolor(e)} onKeyDown={(e)=>this.toggleBakcolorInput(e)}/>
               </div>
@@ -50,7 +50,7 @@ export class Operater extends Component{
             <li className='operater_item operater_item_bakimg'>
               <span>背景图片</span>
               <div className='bakcolor_sign' style={{
-                backgroundImage: this.props.styles.backgroundImage
+                backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
               }}></div>
             </li>
             <li className='operater_item operater_item_width'>
@@ -81,10 +81,10 @@ export class Showcase extends Component{
     return(
       <div className={className}
       style={{
-        width:this.props.styles.showcaseWidth,
-        height:this.props.styles.showcaseHeight,
-        backgroundColor: this.props.styles.backgroundColor,
-        backgroundImage: this.props.styles.backgroundImage
+        width:this.props.stateData[this.props.index].styles.showcaseWidth,
+        height:this.props.stateData[this.props.index].styles.showcaseHeight,
+        backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor,
+        backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
       }}>
       {this.props.children}
       </div>
