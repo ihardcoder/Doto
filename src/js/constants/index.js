@@ -3,6 +3,10 @@ export const DOA = {
   ADD_PAGE: 'ADD_PAGE',
   DEL_PAGE: 'DEL_PAGE'
 };
+// modules action
+export const MODULES = {
+  ADD: 'ADD_MODULE'
+};
 // 设置style action
 export const SET_STYLES = {
   SET_BAK_COLOR: 'SET_BAK_COLOR',

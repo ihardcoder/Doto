@@ -23,7 +23,6 @@ app.use(webpackDevMiddleware(webpack(webpackConf), {
     contentBase: webpackConf.output.path,
     publicPath: webpackConf.output.publicPath,
     hot: true
-    // stats: webpackConf.devServer.stats
 }));
 
 // 处理静态资源和入口文件

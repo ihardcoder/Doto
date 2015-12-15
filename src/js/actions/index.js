@@ -27,3 +27,11 @@ export function toggleBakcolorInput(nextStatus, index) {
     index
   };
 }
+export function addModule(moduleId,moduleType,pageIndex){
+  return {
+    type: TYPES.MODULES.ADD,
+    moduleId,
+    moduleType,
+    pageIndex
+  }
+}

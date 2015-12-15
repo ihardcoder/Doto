@@ -3,15 +3,17 @@ import React , { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider,connect } from 'react-redux';
-
-import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage } from './actions';
+import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage,addModule } from './actions';
 import * as H5Page from './components/H5Page';
 import AppReducers from './reducers';
+
+import {createOperaterModule,createShowcaseModule} from './utils';
 
 let store = createStore(AppReducers);
 
 let rootElement = document.getElementById('doto_appbox');
 
+// 添加页面
 class AddAction extends Component{
   render(){
     return(
@@ -27,19 +29,30 @@ class AddAction extends Component{
 
 // 组件操作区
 class Backstage extends Component{
+  static propTypes = {
+    pageState: PropTypes.array.isRequired
+  }
   render(){
     const className = 'doto_app_backstage';
     const { dispatch,pageState } = this.props;
     let operaters = [];
     let sum = pageState.length;
     for(let i = 0;i<sum;i++){
+      let modules = [];
+      for(let j = 0,len = pageState[i].modules.length; j<len;j++ ){
+        let _module = createOperaterModule(pageState[i].modules[j],i,j);
+        modules.push(_module);
+      }
       operaters.push(<H5Page.Operater
         setBakcolor={(color,index) => dispatch(setBakColor(color,index))}
         toggleSettingPanel = {(isshown,index) => dispatch(toggleSettingPanel(isshown,index))}
         toggleBakcolorInput = {(isshown,index) => dispatch(toggleBakcolorInput(isshown,index))}
+        addModule = {(moduleId,moduleType,pageIndex) => dispatch(addModule(moduleId,moduleType,pageIndex))}
         stateData={pageState}
         index={i}
-        key={i}/>)
+        key={i}>
+        {modules}
+      </H5Page.Operater>)
     }
     return(
       <div className={className}>
@@ -53,17 +66,14 @@ class Backstage extends Component{
     )
   }
 }
-Backstage.propTypes = {
-  pageState: PropTypes.array.isRequired
-}
 
 // 组件展示区
 class Stage extends Component{
-  constructor(){
-    super()
-    this.state = {
-        cur_view: 'iphone'
-    };
+  state = {
+      cur_view: 'iphone'
+  }
+  static propTypes = {
+    pageState: PropTypes.array.isRequired
   }
   changeView(e){
     let nextView = e.target.innerHTML;
@@ -79,7 +89,14 @@ class Stage extends Component{
     let showcases = [];
     let sum = pageState.length;
     for(let i = 0;i<sum;i++){
-      showcases.push(<H5Page.Showcase stateData={pageState} index={i} key={i}/>)
+      let modules = [];
+      for(let j = 0,len = pageState[i].modules.length; j<len;j++ ){
+        let _module = createOperaterModule(pageState[i].modules[j],i,j);
+        modules.push(_module);
+      }
+      showcases.push(<H5Page.Showcase stateData={pageState} index={i} key={i}>
+        {modules}
+      </H5Page.Showcase>)
     }
     let className = 'doto_app_stage doto_app_stage_' + this.state.cur_view;
     return(
@@ -101,10 +118,6 @@ class Stage extends Component{
       </div>
     );
   }
-}
-
-Stage.propTypes = {
-  pageState: PropTypes.array.isRequired
 }
 // 简单的select函数
 // @todo 后期可修改为reselect

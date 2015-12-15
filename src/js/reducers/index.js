@@ -1,6 +1,9 @@
 import * as TYPES from '../constants';
 import { combineReducers } from 'redux';
 
+import * as Textarea from '../modules/Textarea/App';
+// import {setContent} from '../modules/Textarea/reducers';
+
 // page初始样式
 const initStyles = {
   backgroundColor: '#555',
@@ -20,7 +23,8 @@ const initAnimate = {
 const pageState = [{
     styles: initStyles,
     status: initStatus,
-    animation: initAnimate
+    animation: initAnimate,
+    modules:[]
 }];
 /**
 * @desc page的操作reducers，目前将删减&样式&状态&动画的修改暂时汇总为一个函数
@@ -33,17 +37,44 @@ function pageConf(state = pageState, action) {
       return [...state, {
         styles: initStyles,
         status: initStatus,
-        animation: initAnimate
+        animation: initAnimate,
+        modules:{}
       }];
+    case TYPES.MODULES.ADD:
+      return addModule(state,action);
     case TYPES.SET_STYLES.SET_BAK_COLOR:
       return setBackgroundColor(state, action);
     case TYPES.SET_STATUS.TOGGLE_SETTING_PANEL:
       return toggleSettingPanel(state, action);
     case TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT:
       return toggleBakcolorInput(state, action);
+    case Textarea.types.SET_MODUEL_TEXTAREA_TEXT:
+      return Textarea.reducers.setContent(state,action);
     default:
       return state;
   }
+}
+/**
+* @desc 分发函数 - 添加module
+*/
+function addModule(state,action){
+  let _state = state[action.pageIndex];
+  let _modules = [
+    ..._state.modules,
+    {
+      id: action.moduleId,
+      type: action.moduleType,
+      props: Textarea.initState
+    }
+  ];
+
+  return [
+    ...state.slice(0,action.pageIndex),
+    Object.assign({},_state,{
+      modules: _modules
+    }),
+    ...state.slice(action.pageIndex+1)
+  ];
 }
 /**
 * @desc 分发函数 - 设置背景色

@@ -1,5 +1,5 @@
 import './style.scss';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 /**
 * @desc page操作区组件
@@ -28,6 +28,12 @@ export class Operater extends Component{
   hideAllPanels(e){
     this.props.toggleSettingPanel(false,this.props.index);
     this.props.toggleBakcolorInput(false,this.props.index);
+  }
+  addModule(e){
+    let _date = new Date();
+    let _moduleId = 'module_'+_date.getTime();
+    let _pageIndex = this.props.index;
+    this.props.addModule(_moduleId,'textarea',_pageIndex);
   }
   render(){
     const className = 'doto_h5page_operater' + (this.props.className || '');
@@ -60,18 +66,17 @@ export class Operater extends Component{
                 backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
               }}></div>
             </li>
+            <li className='operater_item operater_item_bakimg' onClick={(e)=>this.addModule(e)}>
+              <span>添加模块</span>
+            </li>
           </ul>
         </div>
         <span>页面 {this.props.index+1}</span>
+        <div>{this.props.children}</div>
       </div>
     );
   }
 }
-
-Operater.PropTypes = {
-  backgroundColor: PropTypes.string.isRequired,
-  backgroundImage: PropTypes.string.isRequired
-};
 
 /**
 * @desc 展示区组件
@@ -92,8 +97,3 @@ export class Showcase extends Component{
     );
   }
 }
-
-Showcase.PropTypes = {
-  backgroundColor: PropTypes.string.isRequired,
-  backgroundImage: PropTypes.string.isRequired
-};

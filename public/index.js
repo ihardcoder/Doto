@@ -70,6 +70,8 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
+	var _utils = __webpack_require__(195);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -83,6 +85,8 @@
 	var store = (0, _redux.createStore)(_reducers2.default);
 
 	var rootElement = document.getElementById('doto_appbox');
+
+	// 添加页面
 
 	var AddAction = (function (_Component) {
 	  _inherits(AddAction, _Component);
@@ -142,19 +146,31 @@
 	      var operaters = [];
 	      var sum = pageState.length;
 	      for (var i = 0; i < sum; i++) {
-	        operaters.push(_react2.default.createElement(H5Page.Operater, {
-	          setBakcolor: function setBakcolor(color, index) {
-	            return dispatch((0, _actions.setBakColor)(color, index));
-	          },
-	          toggleSettingPanel: function toggleSettingPanel(isshown, index) {
-	            return dispatch((0, _actions.toggleSettingPanel)(isshown, index));
-	          },
-	          toggleBakcolorInput: function toggleBakcolorInput(isshown, index) {
-	            return dispatch((0, _actions.toggleBakcolorInput)(isshown, index));
-	          },
-	          stateData: pageState,
-	          index: i,
-	          key: i }));
+	        var modules = [];
+	        for (var j = 0, len = pageState[i].modules.length; j < len; j++) {
+	          var _module = (0, _utils.createOperaterModule)(pageState[i].modules[j], i, j);
+	          modules.push(_module);
+	        }
+	        operaters.push(_react2.default.createElement(
+	          H5Page.Operater,
+	          {
+	            setBakcolor: function setBakcolor(color, index) {
+	              return dispatch((0, _actions.setBakColor)(color, index));
+	            },
+	            toggleSettingPanel: function toggleSettingPanel(isshown, index) {
+	              return dispatch((0, _actions.toggleSettingPanel)(isshown, index));
+	            },
+	            toggleBakcolorInput: function toggleBakcolorInput(isshown, index) {
+	              return dispatch((0, _actions.toggleBakcolorInput)(isshown, index));
+	            },
+	            addModule: function addModule(moduleId, moduleType, pageIndex) {
+	              return dispatch((0, _actions.addModule)(moduleId, moduleType, pageIndex));
+	            },
+	            stateData: pageState,
+	            index: i,
+	            key: i },
+	          modules
+	        ));
 	      }
 	      return _react2.default.createElement(
 	        'div',
@@ -178,24 +194,29 @@
 	  return Backstage;
 	})(_react.Component);
 
+	// 组件展示区
+
 	Backstage.propTypes = {
 	  pageState: _react.PropTypes.array.isRequired
 	};
-
-	// 组件展示区
 
 	var Stage = (function (_Component3) {
 	  _inherits(Stage, _Component3);
 
 	  function Stage() {
+	    var _Object$getPrototypeO;
+
+	    var _temp, _this4, _ret;
+
 	    _classCallCheck(this, Stage);
 
-	    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
 
-	    _this4.state = {
+	    return _ret = (_temp = (_this4 = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Stage)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this4), _this4.state = {
 	      cur_view: 'iphone'
-	    };
-	    return _this4;
+	    }, _temp), _possibleConstructorReturn(_this4, _ret);
 	  }
 
 	  _createClass(Stage, [{
@@ -221,7 +242,16 @@
 	      var showcases = [];
 	      var sum = pageState.length;
 	      for (var i = 0; i < sum; i++) {
-	        showcases.push(_react2.default.createElement(H5Page.Showcase, { stateData: pageState, index: i, key: i }));
+	        var modules = [];
+	        for (var j = 0, len = pageState[i].modules.length; j < len; j++) {
+	          var _module = (0, _utils.createOperaterModule)(pageState[i].modules[j], i, j);
+	          modules.push(_module);
+	        }
+	        showcases.push(_react2.default.createElement(
+	          H5Page.Showcase,
+	          { stateData: pageState, index: i, key: i },
+	          modules
+	        ));
 	      }
 	      var className = 'doto_app_stage doto_app_stage_' + this.state.cur_view;
 	      return _react2.default.createElement(
@@ -277,12 +307,12 @@
 
 	  return Stage;
 	})(_react.Component);
+	// 简单的select函数
+	// @todo 后期可修改为reselect
 
 	Stage.propTypes = {
 	  pageState: _react.PropTypes.array.isRequired
 	};
-	// 简单的select函数
-	// @todo 后期可修改为reselect
 	function select(state) {
 	  return {
 	    pageState: state.pageConf
@@ -21440,6 +21470,7 @@
 	exports.setBakColor = setBakColor;
 	exports.toggleSettingPanel = toggleSettingPanel;
 	exports.toggleBakcolorInput = toggleBakcolorInput;
+	exports.addModule = addModule;
 
 	var _constants = __webpack_require__(184);
 
@@ -21474,6 +21505,14 @@
 	    index: index
 	  };
 	}
+	function addModule(moduleId, moduleType, pageIndex) {
+	  return {
+	    type: TYPES.MODULES.ADD,
+	    moduleId: moduleId,
+	    moduleType: moduleType,
+	    pageIndex: pageIndex
+	  };
+	}
 
 /***/ },
 /* 184 */
@@ -21488,6 +21527,10 @@
 	var DOA = exports.DOA = {
 	  ADD_PAGE: 'ADD_PAGE',
 	  DEL_PAGE: 'DEL_PAGE'
+	};
+	// modules action
+	var MODULES = exports.MODULES = {
+	  ADD: 'ADD_MODULE'
 	};
 	// 设置style action
 	var SET_STYLES = exports.SET_STYLES = {
@@ -21579,6 +21622,14 @@
 	      this.props.toggleBakcolorInput(false, this.props.index);
 	    }
 	  }, {
+	    key: 'addModule',
+	    value: function addModule(e) {
+	      var _date = new Date();
+	      var _moduleId = 'module_' + _date.getTime();
+	      var _pageIndex = this.props.index;
+	      this.props.addModule(_moduleId, 'textarea', _pageIndex);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -21645,6 +21696,17 @@
 	              _react2.default.createElement('div', { className: 'bakcolor_sign', style: {
 	                  backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
 	                } })
+	            ),
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'operater_item operater_item_bakimg', onClick: function onClick(e) {
+	                  return _this2.addModule(e);
+	                } },
+	              _react2.default.createElement(
+	                'span',
+	                null,
+	                '添加模块'
+	              )
 	            )
 	          )
 	        ),
@@ -21653,6 +21715,11 @@
 	          null,
 	          '页面 ',
 	          this.props.index + 1
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          this.props.children
 	        )
 	      );
 	    }
@@ -21660,11 +21727,6 @@
 
 	  return Operater;
 	})(_react.Component);
-
-	Operater.PropTypes = {
-	  backgroundColor: _react.PropTypes.string.isRequired,
-	  backgroundImage: _react.PropTypes.string.isRequired
-	};
 
 	/**
 	* @desc 展示区组件
@@ -21699,11 +21761,6 @@
 
 	  return Showcase;
 	})(_react.Component);
-
-	Showcase.PropTypes = {
-	  backgroundColor: _react.PropTypes.string.isRequired,
-	  backgroundImage: _react.PropTypes.string.isRequired
-	};
 
 /***/ },
 /* 186 */
@@ -21740,7 +21797,7 @@
 
 
 	// module
-	exports.push([module.id, ".doto_h5page_operater {\n  width: 180px;\n  height: 300px;\n  line-height: 30px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative; }\n  .doto_h5page_operater .operater_setting {\n    position: absolute;\n    top: 5px;\n    right: 5px;\n    cursor: pointer;\n    -webkit-transform: scale(0.6);\n    -moz-transform: scale(0.6);\n    -o-transform: scale(0.6);\n    transform: scale(0.6);\n    -webkit-transform-origin: top right;\n    -moz-transform-origin: top right;\n    -o-transform-origin: top right;\n    transform-origin: top right; }\n  .doto_h5page_operater .operater_cover {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: #000;\n    opacity: 0.3;\n    display: none; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: 40px;\n    left: 0;\n    width: 100%;\n    background-color: #323330;\n    border-bottom: solid 1px #f5da55;\n    border-top: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n\n.doto_h5page_showcase {\n  background-color: #323330;\n  width: 100%;\n  height: 100%; }\n\n.doto_h5page_icon {\n  background: url(" + __webpack_require__(188) + ") no-repeat;\n  display: inline-block;\n  vertical-align: middle; }\n  .doto_h5page_icon_setting {\n    background-position: 0 0;\n    width: 44px;\n    height: 44px; }\n", ""]);
+	exports.push([module.id, ".doto_h5page_operater {\n  width: 180px;\n  height: 300px;\n  line-height: 30px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative;\n  overflow: hidden; }\n  .doto_h5page_operater .operater_setting {\n    position: absolute;\n    top: 5px;\n    right: 5px;\n    cursor: pointer;\n    -webkit-transform: scale(0.6);\n    -moz-transform: scale(0.6);\n    -o-transform: scale(0.6);\n    transform: scale(0.6);\n    -webkit-transform-origin: top right;\n    -moz-transform-origin: top right;\n    -o-transform-origin: top right;\n    transform-origin: top right; }\n  .doto_h5page_operater .operater_cover {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: #000;\n    opacity: 0.3;\n    text-align: center;\n    display: none; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: 40px;\n    left: 0;\n    width: 100%;\n    background-color: #323330;\n    border-bottom: solid 1px #f5da55;\n    border-top: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n\n.doto_h5page_showcase {\n  background-color: #323330;\n  width: 100%;\n  height: 100%; }\n\n.doto_h5page_icon {\n  background: url(" + __webpack_require__(188) + ") no-repeat;\n  display: inline-block;\n  vertical-align: middle; }\n  .doto_h5page_icon_setting {\n    background-position: 0 0;\n    width: 44px;\n    height: 44px; }\n", ""]);
 
 	// exports
 
@@ -21767,9 +21824,15 @@
 
 	var _redux = __webpack_require__(165);
 
+	var _App = __webpack_require__(190);
+
+	var Textarea = _interopRequireWildcard(_App);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	// import {setContent} from '../modules/Textarea/reducers';
 
 	// page初始样式
 	var initStyles = {
@@ -21790,7 +21853,8 @@
 	var pageState = [{
 	  styles: initStyles,
 	  status: initStatus,
-	  animation: initAnimate
+	  animation: initAnimate,
+	  modules: []
 	}];
 	/**
 	* @desc page的操作reducers，目前将删减&样式&状态&动画的修改暂时汇总为一个函数
@@ -21806,17 +21870,37 @@
 	      return [].concat(_toConsumableArray(state), [{
 	        styles: initStyles,
 	        status: initStatus,
-	        animation: initAnimate
+	        animation: initAnimate,
+	        modules: {}
 	      }]);
+	    case TYPES.MODULES.ADD:
+	      return addModule(state, action);
 	    case TYPES.SET_STYLES.SET_BAK_COLOR:
 	      return setBackgroundColor(state, action);
 	    case TYPES.SET_STATUS.TOGGLE_SETTING_PANEL:
 	      return toggleSettingPanel(state, action);
 	    case TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT:
 	      return toggleBakcolorInput(state, action);
+	    case Textarea.types.SET_MODUEL_TEXTAREA_TEXT:
+	      return Textarea.reducers.setContent(state, action);
 	    default:
 	      return state;
 	  }
+	}
+	/**
+	* @desc 分发函数 - 添加module
+	*/
+	function addModule(state, action) {
+	  var _state = state[action.pageIndex];
+	  var _modules = [].concat(_toConsumableArray(_state.modules), [{
+	    id: action.moduleId,
+	    type: action.moduleType,
+	    props: Textarea.initState
+	  }]);
+
+	  return [].concat(_toConsumableArray(state.slice(0, action.pageIndex)), [Object.assign({}, _state, {
+	    modules: _modules
+	  })], _toConsumableArray(state.slice(action.pageIndex + 1)));
 	}
 	/**
 	* @desc 分发函数 - 设置背景色
@@ -21858,6 +21942,323 @@
 	exports.default = (0, _redux.combineReducers)({
 	  pageConf: pageConf
 	});
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.initState = exports.reducers = exports.actions = exports.types = exports.UI = undefined;
+
+	var _components = __webpack_require__(191);
+
+	var _UI = _interopRequireWildcard(_components);
+
+	var _constants = __webpack_require__(192);
+
+	var _types = _interopRequireWildcard(_constants);
+
+	var _actions2 = __webpack_require__(193);
+
+	var _actions = _interopRequireWildcard(_actions2);
+
+	var _reducers2 = __webpack_require__(194);
+
+	var _reducers = _interopRequireWildcard(_reducers2);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.UI = _UI;
+	// export 组件所用的常量
+	// export react组件
+
+	exports.types = _types;
+	// export actions
+
+	exports.actions = _actions;
+	exports.reducers = _reducers;
+
+	// export react组件初始状态
+
+	var initState = exports.initState = {
+	  styles: {
+	    fontsize: '14px'
+	  },
+	  text: 'hello world'
+	};
+
+/***/ },
+/* 191 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Showcase = exports.Operater = undefined;
+
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Operater = exports.Operater = (function (_Component) {
+	  _inherits(Operater, _Component);
+
+	  function Operater() {
+	    _classCallCheck(this, Operater);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Operater).apply(this, arguments));
+	  }
+
+	  _createClass(Operater, [{
+	    key: 'setText',
+	    value: function setText(e) {
+	      var pageIndex = this.props.pageIndex;
+	      var moduleId = this.props.moduleId;
+	      var text = 'hello doto';
+	      this.props.setText(text, pageIndex, moduleId, this.props.moduleIndex);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'doto_module_textarea_operater', onClick: function onClick(e) {
+	            return _this2.setText(e);
+	          } },
+	        this.props.text
+	      );
+	    }
+	  }]);
+
+	  return Operater;
+	})(_react.Component);
+
+	var Showcase = exports.Showcase = (function (_Component2) {
+	  _inherits(Showcase, _Component2);
+
+	  function Showcase() {
+	    _classCallCheck(this, Showcase);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Showcase).apply(this, arguments));
+	  }
+
+	  _createClass(Showcase, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'doto_module_textarea_showcase' },
+	        this.props.text
+	      );
+	    }
+	  }]);
+
+	  return Showcase;
+	})(_react.Component);
+
+/***/ },
+/* 192 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var DOA_DEL = exports.DOA_DEL = 'DOA_DEL';
+
+	var SET_MODUEL_TEXTAREA_TEXT = exports.SET_MODUEL_TEXTAREA_TEXT = 'SET_MODUEL_TEXTAREA_TEXT';
+	var SET_MODUEL_TEXTAREA_STYLE_FONTSIZE = exports.SET_MODUEL_TEXTAREA_STYLE_FONTSIZE = 'SET_MODUEL_TEXTAREA_STYLE_FONTSIZE';
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setText = setText;
+	exports.setFontsize = setFontsize;
+
+	var _constants = __webpack_require__(192);
+
+	var types = _interopRequireWildcard(_constants);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function setText(text, pageIndex, moduleId, moduleIndex) {
+	  return {
+	    type: types.SET_MODUEL_TEXTAREA_TEXT,
+	    text: text,
+	    pageIndex: pageIndex,
+	    moduleId: moduleId,
+	    moduleIndex: moduleIndex
+	  };
+	}
+
+	function setFontsize(fontsize, pageIndex, moduleId, moduleIndex) {
+	  return {
+	    type: types.SET_MODUEL_TEXTAREA_STYLE_FONTSIZE,
+	    fontsize: fontsize,
+	    pageIndex: pageIndex,
+	    moduleId: moduleId,
+	    moduleIndex: moduleIndex
+	  };
+	}
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setContent = setContent;
+	exports.setLocation = setLocation;
+
+	var _constants = __webpack_require__(192);
+
+	var types = _interopRequireWildcard(_constants);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function setContent(state, action) {
+	  switch (action.type) {
+	    case types.SET_MODUEL_TEXTAREA_TEXT:
+	      var _module = state[action.pageIndex].modules[action.moduleIndex];
+	      _module = Object.assign({}, _module, {
+	        props: _extends({}, _module.props, {
+	          text: action.text
+	        })
+	      });
+	      // _module.props.text = action.text;
+	      var _modules = [].concat(_toConsumableArray(state[action.pageIndex].modules.slice(0, action.moduleIndex)), [_module], _toConsumableArray(state[action.pageIndex].modules.slice(action.moduleIndex + 1)));
+	      var _state = Object.assign({}, state[action.pageIndex], {
+	        modules: _modules
+	      });
+	      return [].concat(_toConsumableArray(state.slice(0, action.pageIndex)), [Object.assign({}, _state)], _toConsumableArray(state.slice(action.pageIndex + 1)));
+	    default:
+	      return state;
+	  }
+	}
+
+	function setLocation(state, action) {}
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.createOperaterModule = createOperaterModule;
+	exports.createShowcaseModule = createShowcaseModule;
+
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(174);
+
+	var _redux = __webpack_require__(165);
+
+	var _App = __webpack_require__(190);
+
+	var Textarea = _interopRequireWildcard(_App);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// import {setText} from '../modules/Textarea/actions';
+
+	function createOperaterModule(module, pageIndex, moduleIndex) {
+	  switch (module.type) {
+	    case 'textarea':
+	      var Module = (function (_Component) {
+	        _inherits(Module, _Component);
+
+	        function Module() {
+	          _classCallCheck(this, Module);
+
+	          return _possibleConstructorReturn(this, Object.getPrototypeOf(Module).apply(this, arguments));
+	        }
+
+	        _createClass(Module, [{
+	          key: 'render',
+	          value: function render() {
+	            var _props = this.props;
+	            var dispatch = _props.dispatch;
+	            var pageState = _props.pageState;
+
+	            return _react2.default.createElement(
+	              'div',
+	              { className: 'doto_module' },
+	              _react2.default.createElement(Textarea.UI.Operater, _extends({
+	                setText: function setText(text, pageIndex, moduleId, moduleIndex) {
+	                  return dispatch(Textarea.actions.setText(text, pageIndex, moduleId, moduleIndex));
+	                },
+	                pageIndex: pageIndex,
+	                moduleId: module.id,
+	                moduleIndex: moduleIndex
+	              }, module.props))
+	            );
+	          }
+	        }]);
+
+	        return Module;
+	      })(_react.Component);
+
+	      var select = function select(state) {
+	        return {
+	          pageState: state.pageConf
+	        };
+	      };
+
+	      var Result = (0, _reactRedux.connect)(select)(Module);
+	      return _react2.default.createElement(Result, { key: moduleIndex });
+	  }
+	}
+
+	function createShowcaseModule(module, pageIndex, moduleIndex) {}
 
 /***/ }
 /******/ ]);
