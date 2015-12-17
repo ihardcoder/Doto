@@ -10,7 +10,13 @@ export * as reducers from './reducers';
 // export react组件初始状态
 export const initState = {
   styles:{
-    fontsize: '14px'
+    fontsize: '1.34rem',
+    color: '#f5da55'
   },
-  text: 'hello world'
+  text: 'hello world',
+  status:{
+    showTextInput: false,
+    showSettingPanel: false
+  },
+  coordinate:null
 }

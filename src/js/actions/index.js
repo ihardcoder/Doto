@@ -5,6 +5,12 @@ export function addPage() {
     type: TYPES.DOA.ADD_PAGE
   }
 }
+export function delPage(pageIndex) {
+  return {
+    type: TYPES.DOA.DEL_PAGE,
+    pageIndex
+  }
+}
 export function setBakColor(color, index) {
   return {
     type: TYPES.SET_STYLES.SET_BAK_COLOR,

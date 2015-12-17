@@ -6,7 +6,7 @@ import * as Textarea from '../modules/Textarea/App';
 
 // page初始样式
 const initStyles = {
-  backgroundColor: '#555',
+  backgroundColor: '#323330',
   backgroundImage: ''
 };
 // page初始status - 设置面板关闭；背景色input隐藏
@@ -40,6 +40,11 @@ function pageConf(state = pageState, action) {
         animation: initAnimate,
         modules:{}
       }];
+    case TYPES.DOA.DEL_PAGE:
+      return [
+        ...state.slice(0,action.pageIndex),
+        ...state.slice(action.pageIndex+1)
+      ];
     case TYPES.MODULES.ADD:
       return addModule(state,action);
     case TYPES.SET_STYLES.SET_BAK_COLOR:
@@ -48,8 +53,14 @@ function pageConf(state = pageState, action) {
       return toggleSettingPanel(state, action);
     case TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT:
       return toggleBakcolorInput(state, action);
-    case Textarea.types.SET_MODUEL_TEXTAREA_TEXT:
+    case Textarea.types.SET_TEXT:
+    case Textarea.types.SET_FONTSIZE:
       return Textarea.reducers.setContent(state,action);
+    case Textarea.types.TOGGLE_TEXT_INPUT:
+    case Textarea.types.TOGGLE_SETTING_PANEL:
+      return Textarea.reducers.setStatus(state,action);
+    case Textarea.types.SET_COORDINATE:
+      return Textarea.reducers.setCoordinate(state,action);
     default:
       return state;
   }

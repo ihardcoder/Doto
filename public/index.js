@@ -72,6 +72,8 @@
 
 	var _utils = __webpack_require__(195);
 
+	var _middlewares = __webpack_require__(196);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -82,7 +84,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var store = (0, _redux.createStore)(_reducers2.default);
+	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_middlewares.logger, _middlewares.crashReporter)(_redux.createStore);
+	var store = createStoreWithMiddleware(_reducers2.default);
 
 	var rootElement = document.getElementById('doto_appbox');
 
@@ -165,6 +168,9 @@
 	            },
 	            addModule: function addModule(moduleId, moduleType, pageIndex) {
 	              return dispatch((0, _actions.addModule)(moduleId, moduleType, pageIndex));
+	            },
+	            delPage: function delPage(pageIndex) {
+	              return dispatch((0, _actions.delPage)(pageIndex));
 	            },
 	            stateData: pageState,
 	            index: i,
@@ -21467,6 +21473,7 @@
 	  value: true
 	});
 	exports.addPage = addPage;
+	exports.delPage = delPage;
 	exports.setBakColor = setBakColor;
 	exports.toggleSettingPanel = toggleSettingPanel;
 	exports.toggleBakcolorInput = toggleBakcolorInput;
@@ -21481,6 +21488,12 @@
 	function addPage() {
 	  return {
 	    type: TYPES.DOA.ADD_PAGE
+	  };
+	}
+	function delPage(pageIndex) {
+	  return {
+	    type: TYPES.DOA.DEL_PAGE,
+	    pageIndex: pageIndex
 	  };
 	}
 	function setBakColor(color, index) {
@@ -21630,6 +21643,11 @@
 	      this.props.addModule(_moduleId, 'textarea', _pageIndex);
 	    }
 	  }, {
+	    key: 'delPage',
+	    value: function delPage(e) {
+	      this.props.delPage(this.props.index);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -21643,13 +21661,18 @@
 	          onMouseLeave: function onMouseLeave(e) {
 	            return _this2.hideAllPanels(e);
 	          } },
-	        _react2.default.createElement('div', { className: 'operater_cover' }),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'operater_setting', onClick: function onClick(e) {
-	              return _this2.toggleSettingPanel(e);
-	            } },
-	          _react2.default.createElement('i', { className: 'doto_h5page_icon doto_h5page_icon_setting' })
+	          { className: 'operater_handler' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'operater_setting', onClick: function onClick(e) {
+	                return _this2.toggleSettingPanel(e);
+	              } },
+	            _react2.default.createElement('i', { className: 'doto_h5page_icon doto_h5page_icon_setting' })
+	          ),
+	          '页面 ',
+	          this.props.index + 1
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -21699,7 +21722,7 @@
 	            ),
 	            _react2.default.createElement(
 	              'li',
-	              { className: 'operater_item operater_item_bakimg', onClick: function onClick(e) {
+	              { className: 'operater_item', onClick: function onClick(e) {
 	                  return _this2.addModule(e);
 	                } },
 	              _react2.default.createElement(
@@ -21707,14 +21730,19 @@
 	                null,
 	                '添加模块'
 	              )
+	            ),
+	            _react2.default.createElement(
+	              'li',
+	              { className: 'operater_item', onClick: function onClick(e) {
+	                  return _this2.delPage(e);
+	                } },
+	              _react2.default.createElement(
+	                'span',
+	                null,
+	                '删除此页'
+	              )
 	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'span',
-	          null,
-	          '页面 ',
-	          this.props.index + 1
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -21797,7 +21825,7 @@
 
 
 	// module
-	exports.push([module.id, ".doto_h5page_operater {\n  width: 180px;\n  height: 300px;\n  line-height: 30px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative;\n  overflow: hidden; }\n  .doto_h5page_operater .operater_setting {\n    position: absolute;\n    top: 5px;\n    right: 5px;\n    cursor: pointer;\n    -webkit-transform: scale(0.6);\n    -moz-transform: scale(0.6);\n    -o-transform: scale(0.6);\n    transform: scale(0.6);\n    -webkit-transform-origin: top right;\n    -moz-transform-origin: top right;\n    -o-transform-origin: top right;\n    transform-origin: top right; }\n  .doto_h5page_operater .operater_cover {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: #000;\n    opacity: 0.3;\n    text-align: center;\n    display: none; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: 40px;\n    left: 0;\n    width: 100%;\n    background-color: #323330;\n    border-bottom: solid 1px #f5da55;\n    border-top: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n\n.doto_h5page_showcase {\n  background-color: #323330;\n  width: 100%;\n  height: 100%; }\n\n.doto_h5page_icon {\n  background: url(" + __webpack_require__(188) + ") no-repeat;\n  display: inline-block;\n  vertical-align: middle; }\n  .doto_h5page_icon_setting {\n    background-position: 0 0;\n    width: 44px;\n    height: 44px; }\n", ""]);
+	exports.push([module.id, ".doto_h5page_operater {\n  width: 180px;\n  box-sizing: border-box;\n  border-radius: 2px;\n  border: solid 1px #f5da55;\n  margin: 20px auto;\n  font-size: 1.17rem;\n  padding: 0 10px;\n  position: relative;\n  overflow: hidden; }\n  .doto_h5page_operater .operater_handler {\n    position: relative;\n    top: 0;\n    left: 0;\n    height: 40px;\n    line-height: 40px; }\n  .doto_h5page_operater .operater_setting {\n    position: absolute;\n    top: 5px;\n    right: 5px;\n    cursor: pointer;\n    -webkit-transform: scale(0.6);\n    -moz-transform: scale(0.6);\n    -o-transform: scale(0.6);\n    transform: scale(0.6);\n    -webkit-transform-origin: top right;\n    -moz-transform-origin: top right;\n    -o-transform-origin: top right;\n    transform-origin: top right; }\n  .doto_h5page_operater .operater_panel {\n    display: none;\n    position: absolute;\n    top: 40px;\n    left: 0;\n    width: 100%;\n    background-color: #323330;\n    border-bottom: solid 1px #f5da55;\n    border-top: solid 1px #f5da55;\n    padding: 0 10px;\n    box-sizing: border-box; }\n    .doto_h5page_operater .operater_panel .operater_list {\n      list-style: none;\n      padding: 0;\n      width: 100%;\n      margin: 0;\n      text-align: left; }\n    .doto_h5page_operater .operater_panel .operater_item {\n      height: 30px;\n      line-height: 30px; }\n    .doto_h5page_operater .operater_panel .item_sign {\n      position: absolute;\n      top: 50%;\n      right: 0;\n      width: 20px;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input_box {\n      position: absolute;\n      top: 50%;\n      left: 0;\n      width: 100%;\n      height: 20px;\n      margin-top: -10px; }\n    .doto_h5page_operater .operater_panel .item_input {\n      width: 100%;\n      height: 100%;\n      box-sizing: border-box;\n      display: block; }\n    .doto_h5page_operater .operater_panel .operater_item_bakcolor {\n      position: relative; }\n\n.doto_h5page_showcase {\n  background-color: #323330;\n  width: 100%;\n  height: 100%; }\n\n.doto_h5page_icon {\n  background: url(" + __webpack_require__(188) + ") no-repeat;\n  display: inline-block;\n  vertical-align: middle; }\n  .doto_h5page_icon_setting {\n    background-position: 0 0;\n    width: 44px;\n    height: 44px; }\n", ""]);
 
 	// exports
 
@@ -21873,6 +21901,8 @@
 	        animation: initAnimate,
 	        modules: {}
 	      }]);
+	    case TYPES.DOA.DEL_PAGE:
+	      return [].concat(_toConsumableArray(state.slice(0, action.pageIndex)), _toConsumableArray(state.slice(action.pageIndex + 1)));
 	    case TYPES.MODULES.ADD:
 	      return addModule(state, action);
 	    case TYPES.SET_STYLES.SET_BAK_COLOR:
@@ -22157,7 +22187,6 @@
 	          text: action.text
 	        })
 	      });
-	      // _module.props.text = action.text;
 	      var _modules = [].concat(_toConsumableArray(state[action.pageIndex].modules.slice(0, action.moduleIndex)), [_module], _toConsumableArray(state[action.pageIndex].modules.slice(action.moduleIndex + 1)));
 	      var _state = Object.assign({}, state[action.pageIndex], {
 	        modules: _modules
@@ -22259,6 +22288,45 @@
 	}
 
 	function createShowcaseModule(module, pageIndex, moduleIndex) {}
+
+/***/ },
+/* 196 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var logger = exports.logger = function logger(store) {
+	  return function (next) {
+	    return function (action) {
+	      console.log('dispatching', action);
+	      var result = next(action);
+	      console.log('next state', store.getState());
+	      return result;
+	    };
+	  };
+	};
+
+	var crashReporter = exports.crashReporter = function crashReporter(store) {
+	  return function (next) {
+	    return function (action) {
+	      try {
+	        return next(action);
+	      } catch (err) {
+	        console.error('Caught an exception!', err);
+	        Raven.captureException(err, {
+	          extra: {
+	            action: action,
+	            state: store.getState()
+	          }
+	        });
+	        throw err;
+	      }
+	    };
+	  };
+	};
 
 /***/ }
 /******/ ]);

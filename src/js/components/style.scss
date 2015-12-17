@@ -1,35 +1,56 @@
-@mixin transform($style){
+@mixin transform($style) {
   -webkit-transform: $style;
   -moz-transform: $style;
   -o-transform: $style;
   transform: $style;
 }
-@mixin transform-origin($rules){
+
+@mixin transform-origin($rules) {
   -webkit-transform-origin: $rules;
   -moz-transform-origin: $rules;
   -o-transform-origin: $rules;
   transform-origin: $rules;
 }
+
+@mixin transition($rule) {
+  -webkit-transition: $rule;
+  -moz-transition: $rule;
+  -o-transition: $rule;
+  transition: $rule;
+}
+
 .doto_h5page_operater {
   width: 180px;
-  height: 300px;
-  line-height: 30px;
   box-sizing: border-box;
-  border-radius: 2px;
-  border: solid 1px #f5da55;
   margin: 20px auto;
   font-size: 1.17rem;
-  padding: 0 10px;
   position: relative;
   overflow: hidden;
-  // &:hover,&-hover{
-  //   .operater_cover{
-  //     display: block;
-  //   }
-  //   // .operater_setting{
-  //   //   display: block;
-  //   // }
-  // }
+
+  &-open {
+    .operater_panel {
+      display: block !important;
+      border: solid 1px #f5da55;
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+    }
+
+    .operater_handler {
+      border-radius: 2px 2px 0 0 !important;
+    }
+  }
+
+  .operater_handler {
+    padding: 0 10px;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 2px;
+    border: solid 1px #f5da55;
+  }
+
   .operater_setting {
     position: absolute;
     top: 5px;
@@ -38,28 +59,11 @@
     @include transform(scale(0.6));
     @include transform-origin(top right);
   }
-  .operater_cover{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000;
-    opacity: 0.3;
-    text-align: center;
-    display: none;
-  }
 
   .operater_panel {
     display: none;
-    position: absolute;
-    top: 40px;
-    left: 0;
     width: 100%;
-    background-color: #323330;
-    border-bottom: solid 1px #f5da55;
-    border-top: solid 1px #f5da55;
-    padding: 0 10px;
+    background-color: #555;
     box-sizing: border-box;
 
     .operater_list {
@@ -70,10 +74,22 @@
       text-align: left;
     }
 
+    .operater_item {
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      &_withact{
+        cursor: pointer;
+        &:hover{
+          background-color: #323330;
+        }
+      }
+    }
+
     .item_sign {
       position: absolute;
       top: 50%;
-      right: 0;
+      right: 10px;
       width: 20px;
       height: 20px;
       margin-top: -10px;
@@ -102,17 +118,41 @@
       }
     }
   }
+
+  .operater_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .operater_modules {
+    width: 150px;
+    float: right;
+
+    .doto_module_operater {
+      line-height: 30px;
+      margin: 5px 0;
+      box-sizing: border-box;
+      border: solid 1px #f5da55;
+      width: 100%;
+    }
+  }
 }
-.doto_h5page_showcase{
+
+.doto_h5page_showcase {
   background-color: #323330;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  position: relative;
 }
-.doto_h5page_icon{
-  background: url('icons.png') no-repeat;
+
+.doto_h5page_icon {
+  background: url('./res/icons.png') no-repeat;
   display: inline-block;
   vertical-align: middle;
-  &_setting{
+
+  &_setting {
     background-position: 0 0;
     width: 44px;
     height: 44px;

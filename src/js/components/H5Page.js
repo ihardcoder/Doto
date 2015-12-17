@@ -1,10 +1,37 @@
 import './style.scss';
 import React, { Component } from 'react';
-
 /**
 * @desc page操作区组件
 */
 export class Operater extends Component{
+  componentDidUpdate(prevProps){
+    this.drawTree();
+  }
+  drawTree(){
+    let _canvasDom = this.refs.operater_canvas;
+    let _modulesDom = this.refs.operater_modules;
+    let _nodes = _modulesDom.children;
+    _canvasDom.width = 50;
+    _canvasDom.height = 1000;
+    let _offset = {
+      top: _modulesDom.offsetTop,
+      left: _modulesDom.offsetLeft
+    };
+    let _ctx = _canvasDom.getContext('2d');
+    _ctx.strokeStyle = '#f5da55';
+    _ctx.clearRect(0,0,50,1000);
+    if(!_nodes || _nodes.length === 0){
+      return;
+    }
+    _ctx.beginPath();
+    _ctx.moveTo(0,_offset.top);
+    for(let i=0,len=_nodes.length;i<len;i++){
+      _ctx.lineTo(0,_nodes[i].offsetTop+16);
+      _ctx.lineTo(_offset.left,_nodes[i].offsetTop+16);
+      _ctx.moveTo(0,_nodes[i].offsetTop+16);
+    }
+    _ctx.stroke();
+  }
   // 设置面板的展示&收起
   toggleSettingPanel(e){
     let nextStatus = !this.props.stateData[this.props.index].status.showSettingPanel ? true : false;
@@ -35,18 +62,19 @@ export class Operater extends Component{
     let _pageIndex = this.props.index;
     this.props.addModule(_moduleId,'textarea',_pageIndex);
   }
+  delPage(e){
+    this.props.delPage(this.props.index);
+  }
   render(){
-    const className = 'doto_h5page_operater' + (this.props.className || '');
+    const className = 'doto_h5page_operater' + (this.props.stateData[this.props.index].status.showSettingPanel ? ' doto_h5page_operater-open':'');
     return(
-      <div className={className} style={{
-        backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor
-      }}
-      onMouseLeave = {(e)=>this.hideAllPanels(e)}>
-        <div className='operater_cover'></div>
-        <div className='operater_setting' onClick = {(e)=>this.toggleSettingPanel(e)}><i className='doto_h5page_icon doto_h5page_icon_setting'></i></div>
-        <div className='operater_panel' style={{
-          display:this.props.stateData[this.props.index].status.showSettingPanel? 'block':'none'
-        }}>
+      <div className={className} >
+        <canvas className='operater_canvas' ref='operater_canvas'></canvas>
+        <div className='operater_handler'>
+          <div className='operater_setting' onClick = {(e)=>this.toggleSettingPanel(e)}><i className='doto_h5page_icon doto_h5page_icon_setting'></i></div>
+          页面 {this.props.index+1}
+        </div>
+        <div className='operater_panel' >
           <ul className='operater_list'>
             <li className='operater_item operater_item_bakcolor'>
               <span>背景色</span>
@@ -57,7 +85,10 @@ export class Operater extends Component{
               <div className='item_input_box' style={{
                 display:this.props.stateData[this.props.index].status.showBakcolorInput? 'block':'none'
               }}>
-                <input className='item_input' onChange={(e)=>this.setBakcolor(e)} onKeyDown={(e)=>this.toggleBakcolorInput(e)}/>
+                <input className='item_input'
+                  value = {this.props.stateData[this.props.index].styles.backgroundColor}
+                  onChange={(e)=>this.setBakcolor(e)}
+                  onKeyDown={(e)=>this.toggleBakcolorInput(e)}/>
               </div>
             </li>
             <li className='operater_item operater_item_bakimg'>
@@ -66,13 +97,15 @@ export class Operater extends Component{
                 backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
               }}></div>
             </li>
-            <li className='operater_item operater_item_bakimg' onClick={(e)=>this.addModule(e)}>
+            <li className='operater_item operater_item_withact' onClick={(e)=>this.addModule(e)}>
               <span>添加模块</span>
+            </li>
+            <li className='operater_item operater_item_withact' onClick={(e)=>this.delPage(e)}>
+              <span>删除此页</span>
             </li>
           </ul>
         </div>
-        <span>页面 {this.props.index+1}</span>
-        <div>{this.props.children}</div>
+        <div className='operater_modules' ref='operater_modules'>{this.props.children}</div>
       </div>
     );
   }

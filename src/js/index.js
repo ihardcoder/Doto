@@ -1,15 +1,17 @@
 import '../styles/main.scss';
 import React , { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore,applyMiddleware } from 'redux';
 import { Provider,connect } from 'react-redux';
-import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage,addModule } from './actions';
+import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage,delPage,addModule } from './actions';
 import * as H5Page from './components/H5Page';
 import AppReducers from './reducers';
 
 import {createOperaterModule,createShowcaseModule} from './utils';
+import {crashReporter} from './middlewares';
 
-let store = createStore(AppReducers);
+let createStoreWithMiddleware = applyMiddleware(crashReporter)(createStore);
+let store = createStoreWithMiddleware(AppReducers);
 
 let rootElement = document.getElementById('doto_appbox');
 
@@ -48,6 +50,7 @@ class Backstage extends Component{
         toggleSettingPanel = {(isshown,index) => dispatch(toggleSettingPanel(isshown,index))}
         toggleBakcolorInput = {(isshown,index) => dispatch(toggleBakcolorInput(isshown,index))}
         addModule = {(moduleId,moduleType,pageIndex) => dispatch(addModule(moduleId,moduleType,pageIndex))}
+        delPage = {(pageIndex) => dispatch(delPage(pageIndex))}
         stateData={pageState}
         index={i}
         key={i}>
@@ -91,7 +94,7 @@ class Stage extends Component{
     for(let i = 0;i<sum;i++){
       let modules = [];
       for(let j = 0,len = pageState[i].modules.length; j<len;j++ ){
-        let _module = createOperaterModule(pageState[i].modules[j],i,j);
+        let _module = createShowcaseModule(pageState[i].modules[j],i,j);
         modules.push(_module);
       }
       showcases.push(<H5Page.Showcase stateData={pageState} index={i} key={i}>

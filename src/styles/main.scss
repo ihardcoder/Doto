@@ -72,6 +72,7 @@ body {
     background-color: $colorBlack;
     color: $colorYellow;
     overflow: hidden;
+    z-index: 100;
   }
 
   .doto_app_stage {
