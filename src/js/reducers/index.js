@@ -5,7 +5,7 @@ import * as Modules from './modules.js';
 
 // page初始样式
 const initStyles = {
-  backgroundColor: '#323330',
+  backgroundColor: '#1299DB',
   backgroundImage: ''
 };
 // page初始status - 设置面板关闭；背景色input隐藏
