@@ -1,26 +1,23 @@
 # Doto
 
-a slight webapp generator
+### 由Redux&React&webpack构建的H5运营页制作工具（未完成，欢迎fork，共同开发）
+
+#### a slight webapp generator construced in Redux,React and webpack(developing)
+
+![](src/res/img/ad.jpg)￼
+
 
 ### 部署流程：
 
 #### 1. 安装Nodejs环境
 
-#### 2. 全局安装webpack
-
-```
-sudo npm install -g webpack
-```
-
-> 目前暂时需要全局安装webpack，后续会修正为当前目录安装
-
-#### 3. 拉取项目文件
+#### 2. 拉取项目文件
 
 ```
 git pull git@github.com:ihardcoder/Doto.git
 ```
 
-#### 4. 进入项目根目录执行
+#### 3. 进入项目根目录执行
 
 ```
 npm install
