@@ -55,7 +55,7 @@ export default class Operater extends Component{
               }}>
                 <ColorPicker type = 'chrome' width='100%'
                 color={this.props.styles.fontcolor}
-                onChange = {(color)=>this.setFontcolor(color)}/>
+                onChangeComplete = {(color)=>this.setFontcolor(color)}/>
               </div>
             </li>
             <li className='setting_item setting_item_del' onClick={()=>this.destory()}>

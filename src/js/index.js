@@ -77,14 +77,17 @@ class Backstage extends Component{
 
 // 展示区
 class Stage extends Component{
-  state = {
-      cur_view: 'iphone'
+  constructor(){
+    super();
+    this.state = {
+        cur_view: 'iphone'
+    };
   }
   static propTypes = {
     pageState: PropTypes.array.isRequired
   }
   changeView(e){
-    let nextView = e.target.innerHTML;
+    let nextView = (e.target.dataset && e.target.dataset.view) || e.target.getAttribute('data-view');
     if(this.state.cur_view === nextView){
       return;
     }
@@ -110,8 +113,8 @@ class Stage extends Component{
     return(
       <div className= {className}>
         <div className='stage_nav'>
-          <span className='stage_nav_item' onClick={(e)=>this.changeView(e)}>iphone</span>
-          <span className='stage_nav_item' onClick={(e)=>this.changeView(e)}>ipad</span>
+          <span className='stage_nav_item' data-view='iphone' onClick={(e)=>this.changeView(e)}>iphone</span>
+          <span className='stage_nav_item' data-view='ipad' onClick={(e)=>this.changeView(e)}>ipad</span>
         </div>
         <div className='doto_app_stage_iphone'>
           <div className='overflowbox'>

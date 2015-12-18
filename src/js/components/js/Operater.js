@@ -89,7 +89,7 @@ export default class Operater extends Component{
               }}>
                 <ColorPicker type = 'chrome' width='100%'
                 color={this.props.stateData[this.props.index].styles.backgroundColor}
-                onChange={(color)=>this.setBakcolor(color)}/>
+                onChangeComplete={(color)=>this.setBakcolor(color)}/>
               </div>
             </li>
             <li className='operater_item operater_item_bakimg'>
