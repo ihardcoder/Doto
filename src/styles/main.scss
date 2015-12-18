@@ -1,4 +1,3 @@
-
 $colorBlack: #323330;
 $colorYellow: #f5da55;
 $hearderHeight: 50px;
@@ -71,24 +70,24 @@ body {
     box-sizing: border-box;
     background-color: $colorBlack;
     color: $colorYellow;
-    overflow: hidden;
     z-index: 100;
+    overflow: hidden;
   }
 
   .doto_app_stage {
     position: relative;
-
+    z-index: -1;
     &_iphone {
       .doto_app_stage_iphone {
         opacity: 1 !important;
-        z-index: 100;
+        z-index: 10;
       }
     }
 
     &_ipad {
       .doto_app_stage_ipad {
         opacity: 1 !important;
-        z-index: 100;
+        z-index: 10;
       }
     }
 
@@ -136,6 +135,7 @@ body {
         bottom: 0;
         right: -15px;
         overflow-y: scroll;
+        // overflow-x: visible;
       }
     }
 

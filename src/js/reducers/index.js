@@ -1,8 +1,7 @@
 import * as TYPES from '../constants';
 import { combineReducers } from 'redux';
 
-import * as Textarea from '../modules/Textarea/App';
-// import {setContent} from '../modules/Textarea/reducers';
+import * as Modules from './modules.js';
 
 // page初始样式
 const initStyles = {
@@ -26,12 +25,19 @@ const pageState = [{
     animation: initAnimate,
     modules:[]
 }];
+
 /**
 * @desc page的操作reducers，目前将删减&样式&状态&动画的修改暂时汇总为一个函数
-* @param state
-* @param action
+* @param {Object}-state
+* @param {Object}-action
+* @return {Object}-state
 */
 function pageConf(state = pageState, action) {
+  // 控件的reducer行为
+  if(!!action.module){
+    return Modules.Reducers[action.module](state,action);
+  }
+  // page本身的reducer行为
   switch (action.type) {
     case TYPES.DOA.ADD_PAGE:
       return [...state, {
@@ -53,20 +59,15 @@ function pageConf(state = pageState, action) {
       return toggleSettingPanel(state, action);
     case TYPES.SET_STATUS.TOGGLE_BAKCOLOR_INPUT:
       return toggleBakcolorInput(state, action);
-    case Textarea.types.SET_TEXT:
-    case Textarea.types.SET_FONTSIZE:
-      return Textarea.reducers.setContent(state,action);
-    case Textarea.types.TOGGLE_TEXT_INPUT:
-    case Textarea.types.TOGGLE_SETTING_PANEL:
-      return Textarea.reducers.setStatus(state,action);
-    case Textarea.types.SET_COORDINATE:
-      return Textarea.reducers.setCoordinate(state,action);
     default:
       return state;
   }
 }
 /**
 * @desc 分发函数 - 添加module
+* @param {Object}-state
+* @param {Object}-action
+* @return {Object}-state
 */
 function addModule(state,action){
   let _state = state[action.pageIndex];
@@ -75,7 +76,7 @@ function addModule(state,action){
     {
       id: action.moduleId,
       type: action.moduleType,
-      props: Textarea.initState
+      props: Modules['Textarea'].initState
     }
   ];
 
@@ -89,6 +90,9 @@ function addModule(state,action){
 }
 /**
 * @desc 分发函数 - 设置背景色
+* @param {Object}-state
+* @param {Object}-action
+* @return {Object}-state
 */
 function setBackgroundColor(state,action){
     let _styles = state[action.index].styles;
@@ -105,6 +109,9 @@ function setBackgroundColor(state,action){
 }
 /**
 * @desc 分发函数 - 设置设置面板的展开与隐藏
+* @param {Object}-state
+* @param {Object}-action
+* @return {Object}-state
 */
 function toggleSettingPanel(state,action){
   let _status = state[action.index].status;
@@ -121,6 +128,9 @@ function toggleSettingPanel(state,action){
 }
 /**
 * @desc 分发函数 - 设置背景色input的显示与隐藏
+* @param {Object}-state
+* @param {Object}-action
+* @return {Object}-state
 */
 function toggleBakcolorInput(state,action){
   let _status = state[action.index].status;

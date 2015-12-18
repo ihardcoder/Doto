@@ -1,21 +1,26 @@
 import '../styles/main.scss';
+// 基础依赖引入
 import React , { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { createStore,applyMiddleware } from 'redux';
 import { Provider,connect } from 'react-redux';
+import $ from 'jquery';
+// page相关行为引入
 import { setBakColor,toggleSettingPanel,toggleBakcolorInput,addPage,delPage,addModule } from './actions';
-import * as H5Page from './components/H5Page';
+import * as H5Page from './components';
 import AppReducers from './reducers';
-
+// utils&middlewares
 import {createOperaterModule,createShowcaseModule} from './utils';
 import {crashReporter} from './middlewares';
 
+// 创建stroe时绑定middleware
 let createStoreWithMiddleware = applyMiddleware(crashReporter)(createStore);
 let store = createStoreWithMiddleware(AppReducers);
 
+// dom容器
 let rootElement = document.getElementById('doto_appbox');
 
-// 添加页面
+// 操作区：添加页面
 class AddAction extends Component{
   render(){
     return(
@@ -29,7 +34,7 @@ class AddAction extends Component{
   }
 }
 
-// 组件操作区
+// 操作区
 class Backstage extends Component{
   static propTypes = {
     pageState: PropTypes.array.isRequired
@@ -70,7 +75,7 @@ class Backstage extends Component{
   }
 }
 
-// 组件展示区
+// 展示区
 class Stage extends Component{
   state = {
       cur_view: 'iphone'
@@ -146,9 +151,38 @@ class App extends Component{
   }
 };
 
+// render
 render(
   <Provider store={store}>
     <App />
   </Provider>,
   rootElement
 );
+
+$(function preventBackspace() {
+  $(document).on('keydown', function(event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+      var d = event.srcElement || event.target;
+      if ((d.tagName.toUpperCase() === 'INPUT' &&
+          (
+            d.type.toUpperCase() === 'TEXT' ||
+            d.type.toUpperCase() === 'PASSWORD' ||
+            d.type.toUpperCase() === 'FILE' ||
+            d.type.toUpperCase() === 'SEARCH' ||
+            d.type.toUpperCase() === 'EMAIL' ||
+            d.type.toUpperCase() === 'NUMBER' ||
+            d.type.toUpperCase() === 'DATE')
+        ) ||
+        d.tagName.toUpperCase() === 'TEXTAREA') {
+        doPrevent = d.readOnly || d.disabled;
+      } else {
+        doPrevent = true;
+      }
+    }
+
+    if (doPrevent) {
+      event.preventDefault();
+    }
+  });
+});

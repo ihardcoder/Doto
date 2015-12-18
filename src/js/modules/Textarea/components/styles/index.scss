@@ -1,3 +1,4 @@
+$errorRed: #f00;
 @mixin transform($style) {
   -webkit-transform: $style;
   -moz-transform: $style;
@@ -53,6 +54,23 @@
     .setting_item {
       padding: 0 5px;
       line-height: 30px;
+      position: relative;
+      &_del{
+        cursor: pointer;
+        &:hover{
+          background-color: $errorRed;
+        }
+      }
+      &_fontcolor{
+        .sign{
+          background-color: #f5da55;
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          top: 5px;
+          right: 5px;
+        }
+      }
     }
     .fontsize_controller{
       float: right;
@@ -95,7 +113,7 @@
     }
   }
   .textarea_icon{
-    background: url('./res/icons.png') no-repeat;
+    background: url('../res/icons.png') no-repeat;
     display: inline-block;
     vertical-align: middle;
     &_setting{

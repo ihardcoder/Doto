@@ -1,9 +1,10 @@
-import './style.scss';
 import React, { Component } from 'react';
+import ColorPicker from 'react-color';
+
 /**
 * @desc page操作区组件
 */
-export class Operater extends Component{
+export default class Operater extends Component{
   componentDidUpdate(prevProps){
     this.drawTree();
   }
@@ -23,12 +24,14 @@ export class Operater extends Component{
     if(!_nodes || _nodes.length === 0){
       return;
     }
+    let y = _offset.top;
     _ctx.beginPath();
-    _ctx.moveTo(0,_offset.top);
+    _ctx.moveTo(0,y);
     for(let i=0,len=_nodes.length;i<len;i++){
-      _ctx.lineTo(0,_nodes[i].offsetTop+16);
-      _ctx.lineTo(_offset.left,_nodes[i].offsetTop+16);
-      _ctx.moveTo(0,_nodes[i].offsetTop+16);
+      y = _offset.top + _nodes[i].offsetTop+16;
+      _ctx.lineTo(0,y);
+      _ctx.lineTo(_offset.left,y);
+      _ctx.moveTo(0,y);
     }
     _ctx.stroke();
   }
@@ -46,10 +49,8 @@ export class Operater extends Component{
     this.props.toggleBakcolorInput(nextStatus,this.props.index);
   }
   // 设置背景颜色
-  setBakcolor(e){
-    let color = '';
-    color = e.target.value;
-    this.props.setBakcolor(color,this.props.index);
+  setBakcolor(color){
+    this.props.setBakcolor('#'+color.hex,this.props.index);
   }
   // 隐藏所有设置面板
   hideAllPanels(e){
@@ -81,14 +82,14 @@ export class Operater extends Component{
               <div className='item_sign bakcolor_sign' style={{
                 backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor
               }}
-              onClick = {(e)=>this.toggleBakcolorInput(e)}></div>
+              onClick = {(e)=>this.toggleBakcolorInput(e)}>
+              </div>
               <div className='item_input_box' style={{
                 display:this.props.stateData[this.props.index].status.showBakcolorInput? 'block':'none'
               }}>
-                <input className='item_input'
-                  value = {this.props.stateData[this.props.index].styles.backgroundColor}
-                  onChange={(e)=>this.setBakcolor(e)}
-                  onKeyDown={(e)=>this.toggleBakcolorInput(e)}/>
+                <ColorPicker type = 'chrome' width='100%'
+                color={this.props.stateData[this.props.index].styles.backgroundColor}
+                onChange={(color)=>this.setBakcolor(color)}/>
               </div>
             </li>
             <li className='operater_item operater_item_bakimg'>
@@ -100,32 +101,12 @@ export class Operater extends Component{
             <li className='operater_item operater_item_withact' onClick={(e)=>this.addModule(e)}>
               <span>添加模块</span>
             </li>
-            <li className='operater_item operater_item_withact' onClick={(e)=>this.delPage(e)}>
+            <li className='operater_item operater_item_del' onClick={(e)=>this.delPage(e)}>
               <span>删除此页</span>
             </li>
           </ul>
         </div>
         <div className='operater_modules' ref='operater_modules'>{this.props.children}</div>
-      </div>
-    );
-  }
-}
-
-/**
-* @desc 展示区组件
-*/
-export class Showcase extends Component{
-  render(){
-    const className = 'doto_h5page_showcase' + (this.props.className || '');
-    return(
-      <div className={className}
-      style={{
-        width:this.props.stateData[this.props.index].styles.showcaseWidth,
-        height:this.props.stateData[this.props.index].styles.showcaseHeight,
-        backgroundColor: this.props.stateData[this.props.index].styles.backgroundColor,
-        backgroundImage: this.props.stateData[this.props.index].styles.backgroundImage
-      }}>
-      {this.props.children}
       </div>
     );
   }
