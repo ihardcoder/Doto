@@ -2,7 +2,7 @@
 
 ### 由Redux&React&webpack构建的H5运营页制作工具（未完成，欢迎fork，共同开发）
 
-#### a slight webapp generator construced in Redux,React and webpack(developing)
+#### a slight H5 webpage generator construced in Redux,React and webpack(developing)
 
 ![](src/res/img/ad.jpg)￼
 
