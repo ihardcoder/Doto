@@ -15,19 +15,20 @@ export function createOperaterModule(module,pageIndex,moduleIndex){
       class Operater_textarea extends Component{
         render(){
           const {dispatch,pageState} = this.props;
+          const _module = pageState[pageIndex].modules[moduleIndex];
           return(
             <div className='doto_module_operater'>
               <Textarea.UI.Operater
               toggleSettingPanel = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.toggleSettingPanel(nextStatus,pageIndex,moduleId,moduleIndex))}
               toggleFontcolorInput = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.toggleFontcolorInput(nextStatus,pageIndex,moduleId,moduleIndex))}
-              setFontsize = {(fontsize,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.setFontsize(fontsize,pageIndex,moduleId,moduleIndex))}
-              setFontcolor = {(color,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.setFontcolor(color,pageIndex,moduleId,moduleIndex))}
+              setFontsize = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.setFontsize(nextStatus,pageIndex,moduleId,moduleIndex))}
+              setFontcolor = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.setFontcolor(nextStatus,pageIndex,moduleId,moduleIndex))}
               destory = {(pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.destory(pageIndex,moduleId,moduleIndex))}
               pageIndex = {pageIndex}
               moduleId = {module.id}
               moduleIndex = {moduleIndex}
-              stateStatus = { pageState[pageIndex].modules[moduleIndex].props.status }
-              styles = {pageState[pageIndex].modules[moduleIndex].props.styles}/>
+              stateStatus = { _module.props.status }
+              styles = {_module.props.styles}/>
             </div>
           )
         }
@@ -43,17 +44,18 @@ export function createShowcaseModule(module,pageIndex,moduleIndex){
       class Showcase_textarea extends Component{
         render(){
           const {dispatch,pageState} = this.props;
+          const _module = pageState[pageIndex].modules[moduleIndex];
           return(
             <div>
               <Textarea.UI.Showcase
               pageIndex = {pageIndex}
               moduleId = {module.id}
               moduleIndex = {moduleIndex}
-              stateStatus = { pageState[pageIndex].modules[moduleIndex].props.status }
-              styles = {pageState[pageIndex].modules[moduleIndex].props.styles}
-              text = { pageState[pageIndex].modules[moduleIndex].props.text }
-              coordinate = { pageState[pageIndex].modules[moduleIndex].props.coordinate }
-              setCoordinate = {(coordinate,pageIndex,moduleId,moduleIndex)=>dispatch(Textarea.Actions.setCoordinate(coordinate,pageIndex,moduleId,moduleIndex))}
+              stateStatus = { _module.props.status }
+              styles = {_module.props.styles}
+              text = { _module.props.text }
+              coordinate = { _module.props.coordinate }
+              setCoordinate = {(nextStatus,pageIndex,moduleId,moduleIndex)=>dispatch(Textarea.Actions.setCoordinate(nextStatus,pageIndex,moduleId,moduleIndex))}
               toggleTextinput = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.toggleTextinput(nextStatus,pageIndex,moduleId,moduleIndex))}
               setText = {(nextStatus,pageIndex,moduleId,moduleIndex) => dispatch(Textarea.Actions.setText(nextStatus,pageIndex,moduleId,moduleIndex))}
               />

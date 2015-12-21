@@ -12,33 +12,33 @@ export function destory(pageIndex,moduleId,moduleIndex){
   };
 }
 // 修改文案
-export function setText(text,pageIndex,moduleId,moduleIndex){
+export function setText(nextStatus,pageIndex,moduleId,moduleIndex){
   return {
     type: types.SET_TEXT,
     module,
-    text,
+    nextStatus,
     pageIndex,
     moduleId,
     moduleIndex
   };
 }
 // 修改字号
-export function setFontsize(fontsize,pageIndex,moduleId,moduleIndex){
+export function setFontsize(nextStatus,pageIndex,moduleId,moduleIndex){
   return {
     type: types.SET_FONTSIZE,
     module,
-    fontsize,
+    nextStatus,
     pageIndex,
     moduleId,
     moduleIndex
   };
 }
 // 修改字色
-export function setFontcolor(color,pageIndex,moduleId,moduleIndex){
+export function setFontcolor(nextStatus,pageIndex,moduleId,moduleIndex){
   return {
     type: types.SET_FONTCOLOR,
     module,
-    color,
+    nextStatus,
     pageIndex,
     moduleId,
     moduleIndex
@@ -78,11 +78,11 @@ export function toggleSettingPanel(nextStatus,pageIndex,moduleId,moduleIndex){
   }
 }
 // 修改坐标
-export function setCoordinate(coordinate,pageIndex,moduleId,moduleIndex){
+export function setCoordinate(nextStatus,pageIndex,moduleId,moduleIndex){
   return{
     type: types.SET_COORDINATE,
     module,
-    coordinate,
+    nextStatus,
     pageIndex,
     moduleId,
     moduleIndex

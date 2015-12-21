@@ -1,5 +1,4 @@
 import * as types from '../constants';
-
 /**
 * @desc reducer汇总函数，负责根据action.type进行行为分发
 * @param {Object}-state
@@ -23,6 +22,41 @@ export function setState(state,action){
     default:
       return state;
   }
+}
+/**
+* @desc 更新state工厂函数
+* @param {Object}-state 初始state
+* @param {Object}-action action
+* @param {Object}-opts 配置参数
+* @return {Object}-state 更新后的state
+*/
+function updateState(state, action, opts) {
+  let sublevel = opts.sublevel;
+  let inherntance = opts.inherntance || null;
+  let _module = state[action.pageIndex].modules[action.moduleIndex];
+  let _props = {
+    ..._module.props,
+    [sublevel]:!inherntance ? action.nextStatus :
+      Object.assign({}, _module.props[sublevel], {
+        [inherntance]: action.nextStatus
+      })
+  }
+  _module = Object.assign({}, _module, {
+    props: _props
+  });
+  let _modules = [
+    ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
+    _module,
+    ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
+  ]
+  let _state = Object.assign({}, state[action.pageIndex], {
+    modules: _modules
+  });
+  return [
+    ...state.slice(0, action.pageIndex),
+    Object.assign({}, _state),
+    ...state.slice(action.pageIndex + 1)
+  ];
 }
 /**
 * @desc 分发函数 - 删除
@@ -55,72 +89,20 @@ function setContent(state,action){
   let _state;
   switch (action.type) {
     case types.SET_TEXT:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          text: action.text
-        }
+      return updateState(state,action,{
+        sublevel: 'text',
+        inherntance: null
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     case types.SET_FONTSIZE:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          styles: Object.assign({},_module.props.styles,{
-            fontsize: action.fontsize
-          })
-        }
+      return updateState(state,action,{
+        sublevel: 'styles',
+        inherntance: 'fontsize'
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     case types.SET_FONTCOLOR:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          styles: Object.assign({},_module.props.styles,{
-            fontcolor: action.color
-          })
-        }
+      return updateState(state,action,{
+        sublevel: 'styles',
+        inherntance: 'fontcolor'
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     default:
       return state;
   }
@@ -136,74 +118,20 @@ function setStatus(state,action){
   let _state;
   switch(action.type){
     case types.TOGGLE_TEXT_INPUT:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          status: Object.assign({},_module.props.status,{
-            showTextInput: action.nextStatus
-          })
-        }
+      return updateState(state,action,{
+        sublevel: 'status',
+        inherntance: 'showTextInput'
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     case types.TOGGLE_FONTCOLOR_INPUT:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          status: Object.assign({},_module.props.status,{
-            showFontcolorInput: action.nextStatus
-          })
-        }
+      return updateState(state,action,{
+        sublevel: 'status',
+        inherntance: 'showFontcolorInput'
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     case types.TOGGLE_SETTING_PANEL:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          status: Object.assign({},_module.props.status,{
-            showSettingPanel: action.nextStatus
-          })
-        }
+      return updateState(state,action,{
+        sublevel: 'status',
+        inherntance: 'showSettingPanel'
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
     default:
       return state;
   }
@@ -219,25 +147,9 @@ function setOutStyles(state,action){
   let _state;
   switch(action.type){
     case types.SET_COORDINATE:
-      _module = state[action.pageIndex].modules[action.moduleIndex];
-      _module = Object.assign({},_module,{
-        props: {
-          ..._module.props,
-          coordinate: Object.assign({},_module.props.coordinate,action.coordinate)
-        }
+      return updateState(state,action,{
+        sublevel: 'coordinate',
+        inherntance: null
       });
-      _modules = [
-        ...state[action.pageIndex].modules.slice(0,action.moduleIndex),
-        _module,
-        ...state[action.pageIndex].modules.slice(action.moduleIndex+1),
-      ]
-      _state = Object.assign({},state[action.pageIndex],{
-        modules: _modules
-      });
-      return [
-        ...state.slice(0,action.pageIndex),
-        Object.assign({},_state),
-        ...state.slice(action.pageIndex+1)
-      ];
   }
 }
